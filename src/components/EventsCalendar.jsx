@@ -2,17 +2,19 @@ import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin } from 'lucide-react';
 
-// Función para obtener fecha local en formato YYYY-MM-DD sin problemas de zona horaria
-const getLocalDateString = (date) => {
-  const d = new Date(date);
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${d.getFullYear()}-${month}-${day}`;
-};
-
 export default function EventsCalendar({ events = [] }) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(getLocalDateString(new Date()));
+  
+  // Obtener fecha actual en formato YYYY-MM-DD sin conversión de zona horaria
+  const getTodayString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  const [selectedDate, setSelectedDate] = useState(getTodayString());
 
   // Obtener eventos del día seleccionado
   const eventsForSelectedDay = useMemo(() => {
@@ -65,8 +67,10 @@ export default function EventsCalendar({ events = [] }) {
 
   const handleSelectDate = (day) => {
     if (day) {
-      const selected = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-      setSelectedDate(getLocalDateString(selected));
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const dayStr = String(day).padStart(2, '0');
+      setSelectedDate(`${year}-${month}-${dayStr}`);
     }
   };
 
@@ -80,9 +84,10 @@ export default function EventsCalendar({ events = [] }) {
 
   const isSelected = (day) => {
     if (!day) return false;
-    const dateStr = getLocalDateString(
-      new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-    );
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    const dateStr = `${year}-${month}-${dayStr}`;
     return dateStr === selectedDate;
   };
 
@@ -214,12 +219,12 @@ export default function EventsCalendar({ events = [] }) {
               {/* Título del día seleccionado */}
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl px-6 py-4">
                 <h3 className="text-white font-bold text-lg">
-                  {new Date(selectedDate).toLocaleDateString('es-ES', {
+                  {new Intl.DateTimeFormat('es-ES', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-                  })}
+                  }).format(new Date(selectedDate + 'T00:00:00'))}
                 </h3>
               </div>
 

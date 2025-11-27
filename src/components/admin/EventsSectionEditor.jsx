@@ -5,21 +5,6 @@ import { motion } from 'framer-motion';
 import { Plus, Trash2, Edit2, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
-// Función para obtener fecha local en formato YYYY-MM-DD sin problemas de zona horaria
-const getLocalDateString = (date) => {
-  const d = new Date(date);
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${d.getFullYear()}-${month}-${day}`;
-};
-
-// Función para parsear fecha sin problemas de zona horaria
-const parseDateString = (dateString) => {
-  if (!dateString) return new Date();
-  const [year, month, day] = dateString.split('-');
-  return new Date(year, month - 1, day);
-};
-
 export default function EventsSectionEditor() {
   const { content, updateSection } = useAdminContent();
   const { events = [] } = content.eventsSection || { events: [] };
