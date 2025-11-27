@@ -298,12 +298,12 @@ export default function EventsSectionEditor() {
                   <div className="flex gap-4 mt-3 text-sm">
                     <span className="flex items-center gap-1 text-gray-700">
                       <span className="font-semibold text-blue-600">📅</span>
-                      {new Date(event.eventDate).toLocaleDateString('es-ES', { 
+                      {new Intl.DateTimeFormat('es-ES', { 
                         weekday: 'short', 
                         year: 'numeric', 
                         month: 'short', 
                         day: 'numeric' 
-                      })}
+                      }).format(new Date(event.eventDate + 'T00:00:00'))}
                     </span>
                     <span className="flex items-center gap-1 text-gray-700">
                       <span className="font-semibold text-blue-600">⏰</span>
