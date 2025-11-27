@@ -29,6 +29,10 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
   gallerySection: {
     title: 'Galería',
     images: []
+  },
+  eventsSection: {
+    title: 'Eventos',
+    events: []
   }
 };
 
