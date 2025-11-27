@@ -5,6 +5,28 @@ import { motion } from 'framer-motion';
 import { Plus, Trash2, Edit2, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
+// Función para asegurar que la fecha se guarde en formato YYYY-MM-DD correcto
+const normalizeDateString = (dateStr) => {
+  if (!dateStr) return '';
+  // Si ya está en formato YYYY-MM-DD, devolverlo tal cual
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return dateStr;
+  }
+  // Si es otro formato, intentar parsearlo
+  try {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      const year = parts[0];
+      const month = String(parts[1]).padStart(2, '0');
+      const day = String(parts[2]).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+  } catch (e) {
+    console.error('Error normalizando fecha:', e);
+  }
+  return dateStr;
+};
+
 export default function EventsSectionEditor() {
   const { content, updateSection } = useAdminContent();
   const { events = [] } = content.eventsSection || { events: [] };
@@ -52,9 +74,17 @@ export default function EventsSectionEditor() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Normalizar fecha si es el campo eventDate
+    let finalValue = value;
+    if (name === 'eventDate' && value) {
+      finalValue = normalizeDateString(value);
+      console.log('📅 Fecha guardada:', finalValue);
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: finalValue
     }));
   };
 
@@ -81,18 +111,25 @@ export default function EventsSectionEditor() {
       return;
     }
 
+    // Crear copia del formData con fecha normalizada
+    const eventToSave = {
+      ...formData,
+      eventDate: normalizeDateString(formData.eventDate)
+    };
+
     let updatedEvents;
     if (editingId !== null) {
       // Editar evento existente
       updatedEvents = [...events];
-      updatedEvents[editingId] = formData;
+      updatedEvents[editingId] = eventToSave;
       toast({ title: '✅ Éxito', description: 'Evento actualizado correctamente' });
     } else {
       // Agregar nuevo evento
-      updatedEvents = [...events, formData];
+      updatedEvents = [...events, eventToSave];
       toast({ title: '✅ Éxito', description: 'Evento agregado correctamente' });
     }
 
+    console.log('💾 Evento guardado:', eventToSave);
     updateSection('eventsSection', { events: updatedEvents });
     handleCancel();
   };
