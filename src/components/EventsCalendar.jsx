@@ -108,7 +108,16 @@ export default function EventsCalendar({ events = [] }) {
           transition={{ duration: 0.5 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4" style={{ fontFamily: 'Poppins-Regular' }}>
+          <h2 
+            className="mb-4"
+            style={{ 
+              fontFamily: 'Poppins-Regular', 
+              fontSize: '30px',
+              color: '#332C26',
+              textAlign: 'center',
+              fontWeight: 'normal'
+            }}
+          >
             EVENTOS
           </h2>
           <div className="w-20 h-1 mx-auto" style={{ background: 'linear-gradient(to right, #332C26, #ECBE8F, #BE9556)' }}></div>

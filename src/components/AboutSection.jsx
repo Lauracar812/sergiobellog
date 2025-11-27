@@ -51,7 +51,16 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 style={{ fontSize: '30px' }} className="font-bold text-gray-800 mb-4">
+          <h2 
+            style={{ 
+              fontSize: '30px',
+              fontFamily: 'Poppins-Regular',
+              color: '#332C26',
+              textAlign: 'center',
+              fontWeight: 'normal'
+            }}
+            className="mb-4"
+          >
             {aboutData.title}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
