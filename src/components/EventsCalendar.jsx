@@ -104,10 +104,10 @@ export default function EventsCalendar({ events = [] }) {
           transition={{ duration: 0.5 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-normal text-gray-900 mb-4" style={{ fontFamily: 'Poppins-Regular' }}>
             EVENTOS
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto"></div>
+          <div className="w-20 h-1 mx-auto" style={{ background: 'linear-gradient(to right, #332C26, #ECBE8F, #BE9556)' }}></div>
         </motion.div>
 
         {/* Contenedor principal - Calendario + Eventos */}
@@ -122,20 +122,20 @@ export default function EventsCalendar({ events = [] }) {
           >
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg border border-gray-200 overflow-hidden">
               {/* Encabezado del calendario */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+              <div className="px-6 py-4" style={{ background: 'linear-gradient(to right, #332C26, #ECBE8F)' }}>
                 <div className="flex justify-between items-center">
                   <button
                     onClick={handlePrevMonth}
-                    className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+                    className="p-1 hover:opacity-80 rounded-lg transition-all"
                   >
                     <ChevronLeft size={20} className="text-white" />
                   </button>
-                  <h3 className="text-white font-bold capitalize text-center flex-1">
+                  <h3 className="text-white font-normal capitalize text-center flex-1" style={{ fontFamily: 'Poppins-Regular' }}>
                     {monthName}
                   </h3>
                   <button
                     onClick={handleNextMonth}
-                    className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+                    className="p-1 hover:opacity-80 rounded-lg transition-all"
                   >
                     <ChevronRight size={20} className="text-white" />
                   </button>
@@ -167,17 +167,21 @@ export default function EventsCalendar({ events = [] }) {
                       onClick={() => handleSelectDate(day)}
                       whileHover={day ? { scale: 1.05 } : {}}
                       className={`
-                        aspect-square rounded-lg font-semibold text-sm transition-all
+                        aspect-square rounded-lg font-normal text-sm transition-all
                         ${!day ? 'cursor-default' : 'cursor-pointer'}
                         ${selected
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                          ? 'text-white font-semibold shadow-lg'
                           : today
-                          ? 'bg-blue-100 text-blue-900 border-2 border-blue-400'
+                          ? 'border-2 font-semibold'
                           : hasEvent
-                          ? 'bg-blue-50 text-gray-900 border-2 border-blue-300 font-bold'
-                          : 'bg-white text-gray-700 hover:bg-gray-100'
+                          ? 'font-bold border-2'
+                          : 'hover:bg-gray-100'
                         }
                       `}
+                      style={selected ? { background: 'linear-gradient(to right, #332C26, #BE9556)' } : 
+                             today ? { background: '#ECBE8F', color: '#332C26', borderColor: '#BE9556' } : 
+                             hasEvent ? { background: '#ECBE8F', color: '#332C26', borderColor: '#ECBE8F' } : 
+                             { backgroundColor: 'white', color: '#332C26' }}
                       disabled={!day}
                     >
                       {day && (
@@ -196,11 +200,11 @@ export default function EventsCalendar({ events = [] }) {
               {/* Leyenda */}
               <div className="border-t border-gray-200 p-4 bg-white text-xs space-y-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded bg-blue-400"></div>
+                  <div className="w-3 h-3 rounded" style={{ background: '#ECBE8F' }}></div>
                   <span className="text-gray-700">Con eventos</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded bg-gradient-to-r from-blue-600 to-purple-600"></div>
+                  <div className="w-3 h-3 rounded" style={{ background: 'linear-gradient(to right, #332C26, #BE9556)' }}></div>
                   <span className="text-gray-700">Seleccionado</span>
                 </div>
               </div>
@@ -217,8 +221,8 @@ export default function EventsCalendar({ events = [] }) {
           >
             <div className="space-y-4">
               {/* Título del día seleccionado */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl px-6 py-4">
-                <h3 className="text-white font-bold text-lg">
+              <div className="rounded-xl px-6 py-4" style={{ background: 'linear-gradient(to right, #332C26, #ECBE8F)' }}>
+                <h3 className="text-white font-normal text-lg" style={{ fontFamily: 'Poppins-Regular' }}>
                   {new Intl.DateTimeFormat('es-ES', {
                     weekday: 'long',
                     year: 'numeric',
@@ -275,7 +279,7 @@ export default function EventsCalendar({ events = [] }) {
                       </div>
 
                       {/* Botón CTA */}
-                      <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                      <button className="w-full py-2 px-4 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5" style={{ background: 'linear-gradient(to right, #332C26, #BE9556)' }}>
                         Más información
                       </button>
                     </motion.div>
