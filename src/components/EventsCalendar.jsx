@@ -21,16 +21,20 @@ export default function EventsCalendar({ events = [] }) {
     return events.filter(event => event.eventDate === selectedDate);
   }, [events, selectedDate]);
 
-  // Obtener días con eventos del mes actual
+  // Obtener días con eventos del mes actual - SIN crear Date objects
   const daysWithEvents = useMemo(() => {
     const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     
     const eventDates = new Set();
     events.forEach(event => {
-      const eventDate = new Date(event.eventDate);
-      if (eventDate.getFullYear() === year && eventDate.getMonth() === month) {
-        eventDates.add(eventDate.getDate());
+      // Comparar directamente con strings YYYY-MM-DD
+      const eventYear = event.eventDate.substring(0, 4);
+      const eventMonth = event.eventDate.substring(5, 7);
+      const eventDay = event.eventDate.substring(8, 10);
+      
+      if (eventYear === String(year) && eventMonth === month) {
+        eventDates.add(parseInt(eventDay));
       }
     });
     return eventDates;
