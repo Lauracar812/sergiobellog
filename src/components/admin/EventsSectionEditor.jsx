@@ -5,6 +5,21 @@ import { motion } from 'framer-motion';
 import { Plus, Trash2, Edit2, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
+// Función para obtener fecha local en formato YYYY-MM-DD sin problemas de zona horaria
+const getLocalDateString = (date) => {
+  const d = new Date(date);
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${month}-${day}`;
+};
+
+// Función para parsear fecha sin problemas de zona horaria
+const parseDateString = (dateString) => {
+  if (!dateString) return new Date();
+  const [year, month, day] = dateString.split('-');
+  return new Date(year, month - 1, day);
+};
+
 export default function EventsSectionEditor() {
   const { content, updateSection } = useAdminContent();
   const { events = [] } = content.eventsSection || { events: [] };
@@ -15,6 +30,7 @@ export default function EventsSectionEditor() {
   const [formData, setFormData] = useState({
     eventName: '',
     eventDescription: '',
+    eventDate: '',
     eventTime: '',
     eventLocation: '',
   });
@@ -24,6 +40,7 @@ export default function EventsSectionEditor() {
     setFormData({
       eventName: '',
       eventDescription: '',
+      eventDate: '',
       eventTime: '',
       eventLocation: '',
     });
@@ -42,6 +59,7 @@ export default function EventsSectionEditor() {
     setFormData({
       eventName: '',
       eventDescription: '',
+      eventDate: '',
       eventTime: '',
       eventLocation: '',
     });
@@ -63,6 +81,10 @@ export default function EventsSectionEditor() {
     }
     if (!formData.eventDescription.trim()) {
       toast({ title: '⚠️ Error', description: 'La descripción del evento es requerida' });
+      return;
+    }
+    if (!formData.eventDate.trim()) {
+      toast({ title: '⚠️ Error', description: 'La fecha del evento es requerida' });
       return;
     }
     if (!formData.eventTime.trim()) {
@@ -144,7 +166,7 @@ export default function EventsSectionEditor() {
               value={formData.eventName}
               onChange={handleInputChange}
               placeholder="Ej: Conferencia de Desarrollo Web"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white placeholder-gray-500"
             />
           </div>
 
@@ -158,11 +180,24 @@ export default function EventsSectionEditor() {
               onChange={handleInputChange}
               placeholder="Describe tu evento aquí..."
               rows="4"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-gray-900 bg-white placeholder-gray-500"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Fecha del Evento *
+              </label>
+              <input
+                type="date"
+                name="eventDate"
+                value={formData.eventDate}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Hora del Evento *
@@ -172,7 +207,7 @@ export default function EventsSectionEditor() {
                 name="eventTime"
                 value={formData.eventTime}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
               />
             </div>
 
@@ -186,7 +221,7 @@ export default function EventsSectionEditor() {
                 value={formData.eventLocation}
                 onChange={handleInputChange}
                 placeholder="Ej: Sala de Conferencias A"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white placeholder-gray-500"
               />
             </div>
           </div>
@@ -239,6 +274,15 @@ export default function EventsSectionEditor() {
                     {event.eventDescription}
                   </p>
                   <div className="flex gap-4 mt-3 text-sm">
+                    <span className="flex items-center gap-1 text-gray-700">
+                      <span className="font-semibold text-blue-600">📅</span>
+                      {new Date(event.eventDate).toLocaleDateString('es-ES', { 
+                        weekday: 'short', 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    </span>
                     <span className="flex items-center gap-1 text-gray-700">
                       <span className="font-semibold text-blue-600">⏰</span>
                       {event.eventTime}
