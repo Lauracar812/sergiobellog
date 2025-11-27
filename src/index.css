@@ -1,0 +1,97 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+
+/* Define custom font face if available, otherwise fallback */
+@font-face {
+  font-family: 'Agan65';
+  src: local('Agan65'), local('Agan 65'), url('https://fonts.cdnfonts.com/s/20123/Agan65.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* Fallback color */
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom font utilities */
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Quill editor styles */
+.ql-container {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.ql-editor {
+  min-height: 250px;
+  padding: 12px;
+  background-color: white;
+  color: #1f2937;
+}
+
+.ql-editor p {
+  margin-bottom: 12px;
+}
+
+.ql-toolbar {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: #f9fafb;
+}
+
+.ql-toolbar button {
+  color: #6b7280;
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar button.ql-active {
+  color: #3b82f6;
+}
+
+.ql-container {
+  border: 1px solid #d1d5db;
+  border-radius: 0 0 0.5rem 0.5rem;
+  border-top: none;
+}
+
+/* ContentEditable placeholder style */
+[contenteditable][data-placeholder]:empty:before {
+  content: attr(data-placeholder);
+  color: #9CA3AF;
+  pointer-events: none;
+  display: block;
+}
+
+/* Ensure good visibility for contentEditable */
+[contenteditable] {
+  outline: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+[contenteditable]:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: -2px;
+}
