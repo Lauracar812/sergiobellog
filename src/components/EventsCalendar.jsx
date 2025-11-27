@@ -167,25 +167,25 @@ export default function EventsCalendar({ events = [] }) {
                       onClick={() => handleSelectDate(day)}
                       whileHover={day ? { scale: 1.05 } : {}}
                       className={`
-                        aspect-square rounded-lg font-normal text-sm transition-all
+                        aspect-square rounded-lg font-semibold text-sm transition-all flex items-center justify-center
                         ${!day ? 'cursor-default' : 'cursor-pointer'}
                         ${selected
-                          ? 'text-white font-semibold shadow-lg'
+                          ? 'text-white shadow-lg'
                           : today
-                          ? 'border-2 font-semibold'
+                          ? 'border-2'
                           : hasEvent
-                          ? 'font-bold border-2'
+                          ? 'border-2'
                           : 'hover:bg-gray-100'
                         }
                       `}
-                      style={selected ? { background: 'linear-gradient(to right, #332C26, #BE9556)' } : 
+                      style={selected ? { background: 'linear-gradient(135deg, #332C26, #BE9556)', color: 'white' } : 
                              today ? { background: '#ECBE8F', color: '#332C26', borderColor: '#BE9556' } : 
                              hasEvent ? { background: '#ECBE8F', color: '#332C26', borderColor: '#ECBE8F' } : 
                              { backgroundColor: 'white', color: '#332C26' }}
                       disabled={!day}
                     >
                       {day && (
-                        <div className="flex flex-col items-center justify-center h-full">
+                        <div className="flex flex-col items-center justify-center">
                           <span>{day}</span>
                           {hasEvent && (
                             <span className="text-xs mt-0.5">●</span>
