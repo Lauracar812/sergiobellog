@@ -25,6 +25,10 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
   booksSection: {
     title: 'Mis Libros',
     books: []
+  },
+  gallerySection: {
+    title: 'Galería',
+    images: []
   }
 };
 

@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import BooksSection from '@/components/BooksSection';
+import GallerySection from '@/components/GallerySection';
 import { Toaster } from '@/components/ui/toaster';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLogin from '@/pages/AdminLogin';
@@ -27,6 +28,7 @@ function Home() {
           <div style={{ height: '50px', backgroundColor: 'white' }}></div>
           <AboutSection />
           <BooksSection />
+          <GallerySection />
         </main>
         <Toaster />
       </div>

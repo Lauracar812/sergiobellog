@@ -5,6 +5,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import HeroSectionEditor from '@/components/admin/HeroSectionEditor';
 import AboutSectionEditor from '@/components/admin/AboutSectionEditor';
 import BooksSectionEditor from '@/components/admin/BooksSectionEditor';
+import GallerySectionEditor from '@/components/admin/GallerySectionEditor';
 import { LogOut } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -24,6 +25,8 @@ export default function AdminDashboard() {
         return '✏️ Editor de Sobre mí';
       case 'books':
         return '📚 Editor de Mis Libros';
+      case 'gallery':
+        return '🖼️ Editor de Galería';
       case 'settings':
         return '⚙️ Configuración';
       default:
@@ -89,6 +92,12 @@ export default function AdminDashboard() {
             {activeSection === 'books' && (
               <div>
                 <BooksSectionEditor />
+              </div>
+            )}
+
+            {activeSection === 'gallery' && (
+              <div>
+                <GallerySectionEditor />
               </div>
             )}
 
