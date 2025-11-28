@@ -44,6 +44,7 @@ const ServicesSection = () => {
 
         {/* Grid de Servicios - 1 fila (5 columnas) centrado */}
         <div
+          id="services-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(5, 1fr)',
@@ -134,9 +135,11 @@ const ServicesSection = () => {
         {/* Responsive styles para servicios */}
         <style>{`
           @media (max-width: 768px) {
-            [style*="gridTemplateColumns: repeat(5"] {
+            #services-grid {
               grid-template-columns: repeat(2, 1fr) !important;
-              gap: 20px !important;
+              gap: 30px !important;
+              width: 100% !important;
+              max-width: 100% !important;
             }
           }
           

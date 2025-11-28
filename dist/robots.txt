@@ -1,0 +1,13 @@
+# Robots.txt para sergiobellog.com
+# Permite acceso a todos los bots
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/dashboard
+
+# Sitemap
+Sitemap: https://sergiobellog.com/sitemap.xml
+
+# Crawl-delay para bots generales (en segundos)
+Crawl-delay: 1
