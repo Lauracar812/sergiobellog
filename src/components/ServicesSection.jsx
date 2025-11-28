@@ -24,8 +24,8 @@ const ServicesSection = () => {
   };
 
   return (
-    <section style={{ backgroundColor: '#EAEAEA', paddingTop: '60px', paddingBottom: '60px', display: 'flex', justifyContent: 'center' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px', textAlign: 'center' }}>
+    <section style={{ backgroundColor: '#EAEAEA', paddingTop: '60px', paddingBottom: '60px' }}>
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
         {/* Título */}
         <h2
           style={{
