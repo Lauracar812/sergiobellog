@@ -45,6 +45,7 @@ const ServicesSection = () => {
           style={{
             display: 'flex',
             justifyContent: 'center',
+            width: '100%',
             marginBottom: '50px'
           }}
         >
@@ -53,7 +54,8 @@ const ServicesSection = () => {
               display: 'grid',
               gridTemplateColumns: 'repeat(5, 1fr)',
               gap: '40px',
-              maxWidth: 'fit-content'
+              width: '100%',
+              maxWidth: '1400px'
             }}
           >
             {services.map((service) => (
