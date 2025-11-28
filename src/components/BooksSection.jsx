@@ -79,10 +79,11 @@ export default function BooksSection() {
           <h2 
             style={{ 
               fontSize: '30px',
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 400,
-            }} 
-            className="text-gray-800"
+              fontFamily: 'Poppins-Regular',
+              color: '#332C26',
+              textAlign: 'center',
+              fontWeight: 'normal'
+            }}
           >
             {booksData.title}
           </h2>
