@@ -109,18 +109,37 @@ const BlogSection = () => {
                 flexDirection: 'column',
                 height: '100%'
               }}>
-                {/* Imagen Destacada */}
-                {featuredPost.featuredImage && (
-                  <img
-                    src={featuredPost.featuredImage}
-                    alt={featuredPost.title}
-                    style={{
-                      width: '100%',
-                      height: '250px',
-                      objectFit: 'cover'
-                    }}
-                  />
-                )}
+                {/* Imagen Destacada o placeholder */}
+                <div style={{
+                  width: '100%',
+                  height: '250px',
+                  backgroundColor: featuredPost.featuredImage ? 'transparent' : '#ECBE8F',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden'
+                }}>
+                  {featuredPost.featuredImage ? (
+                    <img
+                      src={featuredPost.featuredImage}
+                      alt={featuredPost.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  ) : (
+                    <span style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '48px',
+                      color: '#FFFFFF',
+                      fontWeight: 'normal'
+                    }}>
+                      📝
+                    </span>
+                  )}
+                </div>
 
                 {/* Contenido */}
                 <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -198,19 +217,38 @@ const BlogSection = () => {
                   flexDirection: 'row'
                 }}
               >
-                {/* Imagen pequeña */}
-                {post.featuredImage && (
-                  <img
-                    src={post.featuredImage}
-                    alt={post.title}
-                    style={{
-                      width: '120px',
-                      height: '120px',
-                      objectFit: 'cover',
-                      flexShrink: 0
-                    }}
-                  />
-                )}
+                {/* Imagen pequeña o placeholder */}
+                <div style={{
+                  width: '120px',
+                  height: '120px',
+                  backgroundColor: post.featuredImage ? 'transparent' : '#ECBE8F',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  overflow: 'hidden'
+                }}>
+                  {post.featuredImage ? (
+                    <img
+                      src={post.featuredImage}
+                      alt={post.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  ) : (
+                    <span style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '32px',
+                      color: '#FFFFFF',
+                      fontWeight: 'normal'
+                    }}>
+                      📝
+                    </span>
+                  )}
+                </div>
 
                 {/* Contenido */}
                 <div style={{ padding: '15px', display: 'flex', flexDirection: 'column', flex: 1 }}>
