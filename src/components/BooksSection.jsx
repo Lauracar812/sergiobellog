@@ -12,6 +12,7 @@ export default function BooksSection() {
     books: [],
   });
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
 
   // Actualizar los datos cuando cambia el contenido
   useEffect(() => {
@@ -19,6 +20,15 @@ export default function BooksSection() {
       setBooksData(content.booksSection);
     }
   }, [content]);
+
+  // Detectar cambios de tamaño de pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const visibleBooks = booksData.books || [];
 
@@ -42,12 +52,13 @@ export default function BooksSection() {
     return visibleBooks[currentIndex];
   };
 
-  // Mostrar 3 libros a la vez (actual + vecinos)
+  // En móvil: 1 libro, en desktop: 3 libros (actual + vecinos)
   const getVisibleBooks = () => {
     const books = [];
     const total = visibleBooks.length;
+    const range = isMobile ? 0 : 1; // Solo mostrar el actual en móvil
     
-    for (let i = -1; i <= 1; i++) {
+    for (let i = -range; i <= range; i++) {
       const index = (currentIndex + i + total) % total;
       books.push({
         index,
@@ -102,35 +113,38 @@ export default function BooksSection() {
           {visibleBooks.length > 1 && (
             <button
               onClick={handlePrevious}
-              className="absolute left-0 z-10 p-3 rounded-full hover:bg-gray-100 transition-colors"
+              className="absolute left-0 z-10 p-3 rounded-full hover:bg-gray-100 transition-colors hidden sm:block"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             >
               <ChevronLeft size={32} className="text-gray-700" />
             </button>
           )}
 
-          {/* Contenedor de libros */}
-          <div className="flex justify-center gap-8 items-center px-16">
-            {getVisibleBooks().map(({ book, position }) => (
-              <motion.div
-                key={book.id}
-                className="flex flex-col items-center flex-shrink-0"
-              >
-                <img
-                  src={book.coverImage}
-                  alt={book.title}
-                  className="rounded-lg"
-                  style={{ maxHeight: '400px', width: 'auto' }}
-                />
-              </motion.div>
-            ))}
+          {/* Contenedor de libros - con overflow hidden para móvil */}
+          <div className="w-full overflow-hidden flex justify-center">
+            <div className="flex justify-center gap-8 items-center px-4 sm:px-16 w-full max-w-3xl">
+              {getVisibleBooks().map(({ book, position }) => (
+                <motion.div
+                  key={book.id}
+                  className="flex flex-col items-center flex-shrink-0 w-full sm:w-auto"
+                  layout
+                >
+                  <img
+                    src={book.coverImage}
+                    alt={book.title}
+                    className="rounded-lg"
+                    style={{ maxHeight: '400px', width: 'auto', maxWidth: '100%' }}
+                  />
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* Botón siguiente */}
           {visibleBooks.length > 1 && (
             <button
               onClick={handleNext}
-              className="absolute right-0 z-10 p-3 rounded-full hover:bg-gray-100 transition-colors"
+              className="absolute right-0 z-10 p-3 rounded-full hover:bg-gray-100 transition-colors hidden sm:block"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             >
               <ChevronRight size={32} className="text-gray-700" />
