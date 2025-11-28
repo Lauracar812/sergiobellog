@@ -16,12 +16,11 @@ const BlogSection = () => {
   // Mostrar sección aunque no haya posts (para que sea visible en admin)
   const hasNoPosts = !posts || posts.length === 0;
 
-  // Obtener posts destacados
-  const featuredPosts = posts && posts.filter(p => p.featured);
+  // Obtener posts destacados para el carrusel
+  const featuredPosts = (posts || []).filter(p => p.featured && p.featured === true);
   
-  // Obtener post destacado principal y los demás
-  const featuredPost = posts && posts.find(p => p.featured);
-  const otherPosts = posts && posts.filter(p => !p.featured).slice(0, 2);
+  // Todos los posts (para mostrar en la grid)
+  const allPosts = posts || [];
 
   const container = {
     hidden: { opacity: 0 },
@@ -147,175 +146,15 @@ const BlogSection = () => {
             whileInView="show"
             style={{
               display: 'grid',
-              gridTemplateColumns: featuredPost && posts.length > 1 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '30px',
               width: '100%',
               maxWidth: '1200px',
               margin: '0 auto 50px'
             }}
           >
-          {/* Post Destacado */}
-          {featuredPost && (
-            <motion.div
-              variants={item}
-              style={{
-                gridColumn: '1 / 2',
-                display: 'flex',
-                flexDirection: 'column'
-              }}
-            >
-              <div
-                onClick={() => navigate(`/blog/${featuredPost.id}`)}
-                style={{
-                borderRadius: '12px',
-                overflow: 'hidden',
-                boxShadow: '0 8px 32px rgba(51, 44, 38, 0.12)',
-                backgroundColor: '#FFFFFF',
-                border: '2px solid #ECBE8F',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
-                cursor: 'pointer',
-                transform: 'translateY(0)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 16px 48px rgba(51, 44, 38, 0.18)';
-                e.currentTarget.style.transform = 'translateY(-4px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(51, 44, 38, 0.12)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-              >
-                {/* Imagen Destacada o placeholder */}
-                <div style={{
-                  width: '100%',
-                  height: '280px',
-                  backgroundColor: featuredPost.featuredImage ? 'transparent' : '#ECBE8F',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  background: featuredPost.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)'
-                }}>
-                  {featuredPost.featuredImage ? (
-                    <img
-                      src={featuredPost.featuredImage}
-                      alt={featuredPost.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'transform 0.3s ease'
-                      }}
-                    />
-                  ) : (
-                    <span style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '56px',
-                      color: '#FFFFFF',
-                      fontWeight: 'normal'
-                    }}>
-                      📝
-                    </span>
-                  )}
-                  {/* Overlay gradient */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.05) 100%)',
-                    pointerEvents: 'none'
-                  }} />
-                </div>
-
-                {/* Contenido */}
-                <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <span style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '11px',
-                    color: '#ECBE8F',
-                    fontWeight: 'normal',
-                    marginBottom: '12px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1.2px',
-                    fontWeight: '600'
-                  }}>
-                    ⭐ Artículo Destacado
-                  </span>
-
-                  <h3 style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '26px',
-                    color: '#332C26',
-                    fontWeight: 'normal',
-                    marginBottom: '14px',
-                    marginTop: '0',
-                    lineHeight: '1.3',
-                    letterSpacing: '-0.3px'
-                  }}>
-                    {featuredPost.title}
-                  </h3>
-
-                  <p style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '15px',
-                    color: '#5B5B5B',
-                    fontWeight: 'normal',
-                    lineHeight: '1.7',
-                    marginBottom: '20px',
-                    flex: 1
-                  }}>
-                    {featuredPost.description}
-                  </p>
-
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingTop: '16px',
-                    borderTop: '1px solid #EBEBEB'
-                  }}>
-                    <p style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '12px',
-                      color: '#999999',
-                      fontWeight: 'normal',
-                      margin: '0'
-                    }}>
-                      {new Date(featuredPost.date).toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </p>
-                    <span style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '12px',
-                      color: '#ECBE8F',
-                      fontWeight: '600',
-                      letterSpacing: '0.5px'
-                    }}>
-                      Leer más →
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Otros Posts */}
-          <div style={{
-            gridColumn: featuredPost ? '2 / 3' : 'auto',
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '24px'
-          }}>
-            {(featuredPost ? otherPosts : posts.slice(0, 3)).map((post) => (
+            {/* Mostrar todos los posts */}
+            {allPosts.map((post) => (
               <motion.div
                 key={post.id}
                 variants={item}
@@ -327,31 +166,35 @@ const BlogSection = () => {
                   backgroundColor: '#FFFFFF',
                   border: '1px solid #EBEBEB',
                   display: 'flex',
-                  flexDirection: 'row',
+                  flexDirection: 'column',
                   transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
                   cursor: 'pointer',
-                  transform: 'translateY(0)'
+                  transform: 'translateY(0)',
+                  height: '100%'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow = '0 8px 24px rgba(51, 44, 38, 0.14)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
                   e.currentTarget.style.borderColor = '#ECBE8F';
+                  const img = e.currentTarget.querySelector('img');
+                  if (img) img.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow = '0 4px 16px rgba(51, 44, 38, 0.08)';
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.borderColor = '#EBEBEB';
+                  const img = e.currentTarget.querySelector('img');
+                  if (img) img.style.transform = 'scale(1)';
                 }}
               >
-                {/* Imagen pequeña o placeholder */}
+                {/* Imagen destacada - Full width */}
                 <div style={{
-                  width: '140px',
-                  height: '140px',
+                  width: '100%',
+                  height: '200px',
                   backgroundColor: post.featuredImage ? 'transparent' : '#ECBE8F',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  flexShrink: 0,
                   overflow: 'hidden',
                   background: post.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)',
                   position: 'relative'
@@ -370,7 +213,7 @@ const BlogSection = () => {
                   ) : (
                     <span style={{
                       fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '36px',
+                      fontSize: '48px',
                       color: '#FFFFFF',
                       fontWeight: 'normal'
                     }}>
@@ -384,7 +227,7 @@ const BlogSection = () => {
                     left: '0',
                     width: '100%',
                     height: '100%',
-                    background: 'linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.03) 100%)',
+                    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.02) 100%)',
                     pointerEvents: 'none'
                   }} />
                 </div>
@@ -456,7 +299,6 @@ const BlogSection = () => {
                 </div>
               </motion.div>
             ))}
-            </div>
           </motion.div>
         )}
 
