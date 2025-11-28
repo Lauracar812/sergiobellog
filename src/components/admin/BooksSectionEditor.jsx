@@ -153,8 +153,8 @@ export default function BooksSectionEditor() {
         booksSection: formData,
       };
 
-      console.log('📤 Guardando en localStorage...');
-      saveContent(newContent);
+      console.log('📤 Guardando en Supabase...');
+      await saveContent(newContent);
 
       alert('✅ Cambios guardados correctamente');
     } catch (err) {

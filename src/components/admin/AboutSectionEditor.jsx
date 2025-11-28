@@ -170,8 +170,8 @@ export default function AboutSectionEditor() {
         aboutSection: dataToSave
       };
       
-      console.log('📤 Guardando en localStorage...');
-      saveContent(newContent);
+      console.log('📤 Guardando en Supabase...');
+      await saveContent(newContent);
       
       // Mostrar feedback de éxito
       alert('✅ Cambios guardados correctamente');

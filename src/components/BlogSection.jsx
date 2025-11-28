@@ -1,45 +1,36 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAdminContent } from '@/hooks/useAdminContent';
-import BlogCarousel from '@/components/BlogCarousel';
 
 const BlogSection = () => {
   const { content } = useAdminContent();
-  const { title, posts, buttonText } = content.blogSection || {
+  const { title, posts, buttonText } = content?.blogSection || {
     title: 'Blog',
     posts: [],
     buttonText: 'Hablemos'
   };
 
-  // Mostrar sección aunque no haya posts (para que sea visible en admin)
-  const hasNoPosts = !posts || posts.length === 0;
+  const hasPosts = posts && posts.length > 0;
 
-  // Obtener posts destacados
-  const featuredPosts = posts && posts.filter(p => p.featured);
-  
-  // Obtener post destacado principal y los demás
-  const featuredPost = posts && posts.find(p => p.featured);
-  const otherPosts = posts && posts.filter(p => !p.featured).slice(0, 2);
-
-  const container = {
+  const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.3,
+        delayChildren: 0.2,
       },
     },
   };
 
-  const item = {
+  const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   };
 
   return (
     <section style={{ backgroundColor: '#FFFFFF', paddingTop: '80px', paddingBottom: '80px', position: 'relative' }}>
-      {/* Background decorative element */}
+      {/* Decorative circle background */}
       <div style={{
         position: 'absolute',
         top: '0',
@@ -52,55 +43,46 @@ const BlogSection = () => {
         zIndex: '0'
       }} />
 
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: '1' }}>
-        {/* Título con subtítulo */}
+      <div style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        maxWidth: '1400px',
+        margin: '0 auto',
+        position: 'relative',
+        zIndex: '1'
+      }}>
+        {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           style={{ textAlign: 'center', marginBottom: '60px', width: '100%' }}
         >
-          <h2
-            style={{
-              fontFamily: 'Poppins-Regular, sans-serif',
-              fontSize: '42px',
-              color: '#332C26',
-              fontWeight: 'normal',
-              margin: '0 0 15px 0',
-              letterSpacing: '-0.5px'
-            }}
-          >
+          <h2 style={{
+            fontFamily: 'Poppins-Regular, sans-serif',
+            fontSize: '42px',
+            color: '#332C26',
+            fontWeight: 'normal',
+            margin: '0 0 15px 0',
+            letterSpacing: '-0.5px'
+          }}>
             {title}
           </h2>
           <div style={{
             width: '60px',
             height: '3px',
             backgroundColor: '#ECBE8F',
-            margin: '0 auto 0 auto',
+            margin: '0 auto',
             borderRadius: '2px'
           }} />
         </motion.div>
 
-        {/* Carrusel de Posts Destacados */}
-        {!hasNoPosts && featuredPosts && featuredPosts.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{
-              width: '100%',
-              maxWidth: '1200px',
-              margin: '0 auto 80px',
-              paddingLeft: '0',
-              paddingRight: '0'
-            }}
-          >
-            <BlogCarousel posts={featuredPosts} />
-          </motion.div>
-        )}
-
-        {/* Grid de Posts o Mensaje */}
-        {hasNoPosts ? (
+        {/* Blog Grid or Empty State */}
+        {!hasPosts ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -139,254 +121,95 @@ const BlogSection = () => {
             </p>
           </motion.div>
         ) : (
-          <motion.div
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: featuredPost && posts.length > 1 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '30px',
-              width: '100%',
-              maxWidth: '1200px',
-              margin: '0 auto 50px'
-            }}
-          >
-          {/* Post Destacado */}
-          {featuredPost && (
+          <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
+            {/* Grid de 3 columnas */}
             <motion.div
-              variants={item}
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="show"
               style={{
-                gridColumn: '1 / 2',
-                display: 'flex',
-                flexDirection: 'column'
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '30px',
+                width: '100%',
+                margin: '0 auto 60px'
               }}
             >
-              <div style={{
-                borderRadius: '12px',
-                overflow: 'hidden',
-                boxShadow: '0 8px 32px rgba(51, 44, 38, 0.12)',
-                backgroundColor: '#FFFFFF',
-                border: '2px solid #ECBE8F',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
-                cursor: 'pointer',
-                transform: 'translateY(0)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 16px 48px rgba(51, 44, 38, 0.18)';
-                e.currentTarget.style.transform = 'translateY(-4px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(51, 44, 38, 0.12)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-              >
-                {/* Imagen Destacada o placeholder */}
-                <div style={{
-                  width: '100%',
-                  height: '280px',
-                  backgroundColor: featuredPost.featuredImage ? 'transparent' : '#ECBE8F',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  background: featuredPost.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)'
-                }}>
-                  {featuredPost.featuredImage ? (
-                    <img
-                      src={featuredPost.featuredImage}
-                      alt={featuredPost.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'transform 0.3s ease'
-                      }}
-                    />
-                  ) : (
-                    <span style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '56px',
-                      color: '#FFFFFF',
-                      fontWeight: 'normal'
-                    }}>
-                      📝
-                    </span>
-                  )}
-                  {/* Overlay gradient */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.05) 100%)',
-                    pointerEvents: 'none'
-                  }} />
-                </div>
-
-                {/* Contenido */}
-                <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <span style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '11px',
-                    color: '#ECBE8F',
-                    fontWeight: 'normal',
-                    marginBottom: '12px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1.2px',
-                    fontWeight: '600'
-                  }}>
-                    ⭐ Artículo Destacado
-                  </span>
-
-                  <h3 style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '26px',
-                    color: '#332C26',
-                    fontWeight: 'normal',
-                    marginBottom: '14px',
-                    marginTop: '0',
-                    lineHeight: '1.3',
-                    letterSpacing: '-0.3px'
-                  }}>
-                    {featuredPost.title}
-                  </h3>
-
-                  <p style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '15px',
-                    color: '#5B5B5B',
-                    fontWeight: 'normal',
-                    lineHeight: '1.7',
-                    marginBottom: '20px',
-                    flex: 1
-                  }}>
-                    {featuredPost.description}
-                  </p>
-
-                  <div style={{
+              {posts.map((post) => (
+                <motion.div
+                  key={post.id}
+                  variants={itemVariants}
+                  style={{
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 16px rgba(51, 44, 38, 0.08)',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #EBEBEB',
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingTop: '16px',
-                    borderTop: '1px solid #EBEBEB'
-                  }}>
-                    <p style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '12px',
-                      color: '#999999',
-                      fontWeight: 'normal',
-                      margin: '0'
-                    }}>
-                      {new Date(featuredPost.date).toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </p>
-                    <span style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '12px',
-                      color: '#ECBE8F',
-                      fontWeight: '600',
-                      letterSpacing: '0.5px'
-                    }}>
-                      Leer más →
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Otros Posts */}
-          <div style={{
-            gridColumn: featuredPost ? '2 / 3' : 'auto',
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '24px'
-          }}>
-            {(featuredPost ? otherPosts : posts.slice(0, 3)).map((post) => (
-              <motion.div
-                key={post.id}
-                variants={item}
-                style={{
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 4px 16px rgba(51, 44, 38, 0.08)',
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid #EBEBEB',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
-                  cursor: 'pointer',
-                  transform: 'translateY(0)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(51, 44, 38, 0.14)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.borderColor = '#ECBE8F';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(51, 44, 38, 0.08)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = '#EBEBEB';
-                }}
-              >
-                {/* Imagen pequeña o placeholder */}
-                <div style={{
-                  width: '140px',
-                  height: '140px',
-                  backgroundColor: post.featuredImage ? 'transparent' : '#ECBE8F',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  overflow: 'hidden',
-                  background: post.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)',
-                  position: 'relative'
-                }}>
-                  {post.featuredImage ? (
-                    <img
-                      src={post.featuredImage}
-                      alt={post.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'transform 0.3s ease'
-                      }}
-                    />
-                  ) : (
-                    <span style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '36px',
-                      color: '#FFFFFF',
-                      fontWeight: 'normal'
-                    }}>
-                      📝
-                    </span>
-                  )}
-                  {/* Overlay gradient */}
+                    flexDirection: 'column',
+                    transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
+                    cursor: 'pointer',
+                    transform: 'translateY(0)',
+                    height: '100%'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(51, 44, 38, 0.14)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.borderColor = '#ECBE8F';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(51, 44, 38, 0.08)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = '#EBEBEB';
+                  }}
+                >
+                  {/* Featured Image */}
                   <div style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
                     width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.03) 100%)',
-                    pointerEvents: 'none'
-                  }} />
-                </div>
+                    height: '200px',
+                    backgroundColor: post.featuredImage ? 'transparent' : '#ECBE8F',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    background: post.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)'
+                  }}>
+                    {post.featuredImage ? (
+                      <img
+                        src={post.featuredImage}
+                        alt={post.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.3s ease'
+                        }}
+                      />
+                    ) : (
+                      <span style={{
+                        fontFamily: 'Poppins-Regular, sans-serif',
+                        fontSize: '48px',
+                        color: '#FFFFFF',
+                        fontWeight: 'normal'
+                      }}>
+                        📝
+                      </span>
+                    )}
+                    {/* Overlay gradient */}
+                    <div style={{
+                      position: 'absolute',
+                      top: '0',
+                      left: '0',
+                      width: '100%',
+                      height: '100%',
+                      background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.05) 100%)',
+                      pointerEvents: 'none'
+                    }} />
+                  </div>
 
-                {/* Contenido */}
-                <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
-                  <div>
+                  {/* Content */}
+                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                     <h4 style={{
                       fontFamily: 'Poppins-Regular, sans-serif',
                       fontSize: '18px',
@@ -406,93 +229,110 @@ const BlogSection = () => {
                       color: '#5B5B5B',
                       fontWeight: 'normal',
                       lineHeight: '1.6',
-                      marginBottom: '0',
-                      margin: '0',
+                      marginBottom: '20px',
+                      margin: '0 0 20px 0',
                       display: '-webkit-box',
-                      WebkitLineClamp: 2,
+                      WebkitLineClamp: 3,
                       WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
+                      overflow: 'hidden',
+                      flex: 1
                     }}>
                       {post.description}
                     </p>
-                  </div>
 
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginTop: '14px',
-                    paddingTop: '12px',
-                    borderTop: '1px solid #EBEBEB'
-                  }}>
-                    <p style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '11px',
-                      color: '#999999',
-                      fontWeight: 'normal',
-                      margin: '0'
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingTop: '12px',
+                      borderTop: '1px solid #EBEBEB'
                     }}>
-                      {new Date(post.date).toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </p>
-                    <span style={{
-                      fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '11px',
-                      color: '#ECBE8F',
-                      fontWeight: '600',
-                      letterSpacing: '0.3px'
-                    }}>
-                      →
-                    </span>
+                      <p style={{
+                        fontFamily: 'Poppins-Regular, sans-serif',
+                        fontSize: '11px',
+                        color: '#999999',
+                        fontWeight: 'normal',
+                        margin: '0'
+                      }}>
+                        {post.date ? new Date(post.date).toLocaleDateString('es-ES', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        }) : 'Sin fecha'}
+                      </p>
+                      <span style={{
+                        fontFamily: 'Poppins-Regular, sans-serif',
+                        fontSize: '11px',
+                        color: '#ECBE8F',
+                        fontWeight: '600',
+                        letterSpacing: '0.3px',
+                        transition: 'color 0.2s ease'
+                      }}>
+                        Leer más →
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-            </div>
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         )}
 
-        {/* Botón */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}
-        >
-          <button
-            style={{
-              backgroundColor: '#353535',
-              color: '#FFFFFF',
-              fontSize: '16px',
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 400,
-              padding: '14px 40px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              border: 'none',
-              transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
-              letterSpacing: '0.5px',
-              textTransform: 'uppercase',
-              boxShadow: '0 4px 12px rgba(53, 53, 53, 0.2)'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#454545';
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 8px 20px rgba(53, 53, 53, 0.28)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = '#353535';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 12px rgba(53, 53, 53, 0.2)';
-            }}
+        {/* CTA Button */}
+        {hasPosts && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}
           >
-            {buttonText}
-          </button>
-        </motion.div>
+            <button
+              style={{
+                backgroundColor: '#353535',
+                color: '#FFFFFF',
+                fontSize: '16px',
+                fontFamily: 'Poppins, sans-serif',
+                fontWeight: 400,
+                padding: '14px 40px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                border: 'none',
+                transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
+                letterSpacing: '0.5px',
+                textTransform: 'uppercase',
+                boxShadow: '0 4px 12px rgba(53, 53, 53, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#454545';
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 8px 20px rgba(53, 53, 53, 0.28)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#353535';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 12px rgba(53, 53, 53, 0.2)';
+              }}
+            >
+              {buttonText}
+            </button>
+          </motion.div>
+        )}
       </div>
+
+      {/* Responsive styles */}
+      <style>{`
+        @media (max-width: 1024px) {
+          [style*="gridTemplateColumns: repeat(3"] {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        
+        @media (max-width: 640px) {
+          [style*="gridTemplateColumns: repeat(3"] {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

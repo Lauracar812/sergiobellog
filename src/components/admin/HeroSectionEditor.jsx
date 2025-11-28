@@ -72,7 +72,7 @@ export default function HeroSectionEditor() {
         ...content,
         heroSection: formData
       };
-      saveContent(newContent);
+      await saveContent(newContent);
       
       // Mostrar feedback de éxito
       alert('✅ Cambios guardados correctamente');

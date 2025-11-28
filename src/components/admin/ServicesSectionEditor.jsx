@@ -20,18 +20,18 @@ const ServicesSectionEditor = () => {
   };
 
   // Manejar cambios en el título de la sección
-  const handleSectionTitleChange = (e) => {
+  const handleSectionTitleChange = async (e) => {
     const newTitle = e.target.value;
-    updateSection('servicesSection', {
+    await updateSection('servicesSection', {
       ...servicesSection,
       title: newTitle
     });
   };
 
   // Manejar cambios en el texto del botón
-  const handleButtonTextChange = (e) => {
+  const handleButtonTextChange = async (e) => {
     const newButtonText = e.target.value;
-    updateSection('servicesSection', {
+    await updateSection('servicesSection', {
       ...servicesSection,
       buttonText: newButtonText
     });
@@ -54,7 +54,7 @@ const ServicesSectionEditor = () => {
   };
 
   // Guardar cambios del servicio
-  const saveService = () => {
+  const saveService = async () => {
     if (!formData.title.trim() || !formData.description.trim()) {
       toast({
         title: 'Error',
@@ -68,7 +68,7 @@ const ServicesSectionEditor = () => {
       s.id === editingId ? { ...s, ...formData } : s
     );
 
-    updateSection('servicesSection', {
+    await updateSection('servicesSection', {
       ...servicesSection,
       services: updatedServices
     });
@@ -82,10 +82,10 @@ const ServicesSectionEditor = () => {
   };
 
   // Eliminar servicio
-  const deleteService = (id) => {
+  const deleteService = async (id) => {
     const updatedServices = servicesSection.services.filter((s) => s.id !== id);
 
-    updateSection('servicesSection', {
+    await updateSection('servicesSection', {
       ...servicesSection,
       services: updatedServices
     });
@@ -97,7 +97,7 @@ const ServicesSectionEditor = () => {
   };
 
   // Agregar nuevo servicio
-  const addNewService = () => {
+  const addNewService = async () => {
     if (!formData.title.trim() || !formData.description.trim()) {
       toast({
         title: 'Error',
@@ -112,7 +112,7 @@ const ServicesSectionEditor = () => {
       ...formData
     };
 
-    updateSection('servicesSection', {
+    await updateSection('servicesSection', {
       ...servicesSection,
       services: [...servicesSection.services, newService]
     });

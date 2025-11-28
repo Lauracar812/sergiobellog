@@ -10,7 +10,7 @@ import GallerySection from '@/components/GallerySection';
 import EventsSection from '@/components/EventsSection';
 import ServicesSection from '@/components/ServicesSection';
 import BlogSection from '@/components/BlogSection';
-import BlogPost from '@/pages/BlogPost';
+import Footer from '@/components/Footer';
 import { Toaster } from '@/components/ui/toaster';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLogin from '@/pages/AdminLogin';
@@ -30,13 +30,26 @@ function Home() {
             <HeroSection />
           </div>
           <div style={{ height: '50px', backgroundColor: 'white' }}></div>
-          <AboutSection />
-          <BooksSection />
-          <GallerySection />
-          <EventsSection />
-          <ServicesSection />
-          <BlogSection />
+          <div id="about">
+            <AboutSection />
+          </div>
+          <div id="books">
+            <BooksSection />
+          </div>
+          <div id="gallery">
+            <GallerySection />
+          </div>
+          <div id="events">
+            <EventsSection />
+          </div>
+          <div id="services">
+            <ServicesSection />
+          </div>
+          <div id="blog">
+            <BlogSection />
+          </div>
         </main>
+        <Footer />
         <Toaster />
       </div>
     </>
@@ -49,9 +62,6 @@ function App() {
       <Routes>
         {/* Landing principal */}
         <Route path="/" element={<Home />} />
-
-        {/* Blog routes */}
-        <Route path="/blog/:id" element={<BlogPost />} />
         
         {/* Admin routes */}
         <Route path="/admin" element={<AdminLogin />} />

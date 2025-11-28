@@ -90,8 +90,8 @@ export default function GallerySectionEditor() {
       console.log('✅ Imagen comprimida y lista');
 
       const newImage = {
-        id: Math.random(),
-        imageData: compressedBase64,
+        id: formData.images.length > 0 ? Math.max(...formData.images.map(img => img.id || 0)) + 1 : 1,
+        image: compressedBase64,
       };
 
       setFormData(prev => ({
@@ -143,8 +143,8 @@ export default function GallerySectionEditor() {
         gallerySection: formData,
       };
 
-      console.log('📤 Guardando en localStorage...');
-      saveContent(newContent);
+      console.log('📤 Guardando en Supabase...');
+      await saveContent(newContent);
 
       alert('✅ Cambios guardados correctamente');
     } catch (err) {
@@ -212,7 +212,7 @@ export default function GallerySectionEditor() {
                 <div key={image.id} className="relative group">
                   <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
                     <img
-                      src={image.imageData}
+                      src={image.image}
                       alt="Galería"
                       className="w-full h-full object-cover"
                     />

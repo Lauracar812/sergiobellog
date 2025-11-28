@@ -112,7 +112,7 @@ export default function GallerySection() {
               className="flex flex-col items-center"
             >
               <img
-                src={getCurrentImage().imageData}
+                src={getCurrentImage().image}
                 alt="Galería"
                 className="rounded-lg max-h-96 w-auto object-contain"
               />

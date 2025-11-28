@@ -3,12 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,20 +18,23 @@ const Header = () => {
   }, []);
 
   const menuItems = [
-    "Sobre mí",
-    "Mis libros",
-    "Galería",
-    "Eventos",
-    "Servicios",
-    "Blog"
+    { label: "Sobre mí", id: "about" },
+    { label: "Mis libros", id: "books" },
+    { label: "Galería", id: "gallery" },
+    { label: "Eventos", id: "events" },
+    { label: "Servicios", id: "services" },
+    { label: "Blog", id: "blog" }
   ];
 
   const handleNavClick = (item) => {
-    toast({
-      title: `Navegando a ${item}`,
-      description: "🚧 Esta sección está en construcción. ¡Pronto estará disponible! 🚀",
-    });
-    setIsMobileMenuOpen(false);
+    const element = document.getElementById(item.id);
+    if (element) {
+      // Cerrar menú móvil si está abierto
+      setIsMobileMenuOpen(false);
+      
+      // Scroll suave a la sección
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -68,12 +69,12 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8 items-center">
             {menuItems.map((item) => (
               <button
-                key={item}
+                key={item.id}
                 onClick={() => handleNavClick(item)}
                 className="text-[#FFFFFF] hover:text-white/80 px-3 py-2 text-[16.1px] font-medium transition-colors duration-200 text-left"
-                style={{ fontFamily: 'Agan65, sans-serif' }} // Assuming Agan65 is loaded or fallback
+                style={{ fontFamily: 'Agan65, sans-serif' }}
               >
-                {item}
+                {item.label}
               </button>
             ))}
           </nav>
@@ -104,12 +105,12 @@ const Header = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {menuItems.map((item) => (
                 <button
-                  key={item}
+                  key={item.id}
                   onClick={() => handleNavClick(item)}
                   className="text-white hover:bg-white/20 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
                   style={{ fontFamily: 'Agan65, sans-serif' }}
                 >
-                  {item}
+                  {item.label}
                 </button>
               ))}
             </div>

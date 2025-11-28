@@ -29,6 +29,18 @@ export default function BlogSectionEditor() {
     }
   }, [content]);
 
+  // Guardar cambios en el título o botón con debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (blogData && content?.blogSection && 
+          (blogData.title !== content.blogSection.title || 
+           blogData.buttonText !== content.blogSection.buttonText)) {
+        saveContent({ ...content, blogSection: blogData });
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [blogData.title, blogData.buttonText]);
+
   const handleAddPost = () => {
     setEditingPost(null);
     setFormData({
@@ -76,7 +88,7 @@ export default function BlogSectionEditor() {
     }
   };
 
-  const handleSavePost = () => {
+  const handleSavePost = async () => {
     if (!formData.title.trim()) {
       toast({
         title: 'Error',
@@ -115,9 +127,11 @@ export default function BlogSectionEditor() {
         description: 'Post actualizado correctamente'
       });
     } else {
+      // Generar ID numérico único
+      const newId = blogData.posts.length > 0 ? Math.max(...blogData.posts.map(p => p.id || 0)) + 1 : 1;
       const newPost = {
         ...formData,
-        id: Date.now()
+        id: newId
       };
       updatedBlog = {
         ...blogData,
@@ -130,7 +144,7 @@ export default function BlogSectionEditor() {
     }
 
     setBlogData(updatedBlog);
-    saveContent({ ...content, blogSection: updatedBlog });
+    await saveContent({ ...content, blogSection: updatedBlog });
     setShowForm(false);
     setEditingPost(null);
     setFormData({
@@ -143,14 +157,14 @@ export default function BlogSectionEditor() {
     });
   };
 
-  const handleDeletePost = (id) => {
+  const handleDeletePost = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este post?')) {
       const updatedBlog = {
         ...blogData,
         posts: blogData.posts.filter(p => p.id !== id)
       };
       setBlogData(updatedBlog);
-      saveContent({ ...content, blogSection: updatedBlog });
+      await saveContent({ ...content, blogSection: updatedBlog });
       toast({
         title: 'Éxito',
         description: 'Post eliminado correctamente'
@@ -186,7 +200,6 @@ export default function BlogSectionEditor() {
             onChange={(e) => {
               const updated = { ...blogData, title: e.target.value };
               setBlogData(updated);
-              saveContent({ ...content, blogSection: updated });
             }}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
           />
@@ -203,7 +216,6 @@ export default function BlogSectionEditor() {
             onChange={(e) => {
               const updated = { ...blogData, buttonText: e.target.value };
               setBlogData(updated);
-              saveContent({ ...content, blogSection: updated });
             }}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
           />

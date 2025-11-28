@@ -1,4 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+// Inicializar Supabase
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 const DEFAULT_CONTENT = {
   heroSection: {
@@ -83,23 +89,132 @@ export const useAdminContent = () => {
   const [content, setContent] = useState(DEFAULT_CONTENT);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Cargar contenido del localStorage
-  const loadContent = useCallback(() => {
-    console.log('📥 Cargando contenido desde localStorage...');
-    const savedContent = localStorage.getItem(STORAGE_KEY);
-    if (savedContent) {
-      try {
-        const parsed = JSON.parse(savedContent);
-        console.log('✅ Contenido cargado desde localStorage');
-        setContent(parsed);
-      } catch (error) {
-        console.error('❌ Error al parsear localStorage:', error);
+  // Cargar contenido desde Supabase
+  const loadContent = useCallback(async () => {
+    console.log('📥 Cargando contenido...');
+    
+    // Si Supabase no está configurado, usar localStorage
+    if (!supabase) {
+      console.log('⚠️ Supabase no configurado, usando localStorage');
+      const savedContent = localStorage.getItem(STORAGE_KEY);
+      if (savedContent) {
+        try {
+          const parsed = JSON.parse(savedContent);
+          console.log('✅ Contenido cargado desde localStorage');
+          setContent(parsed);
+        } catch (error) {
+          console.error('❌ Error al parsear localStorage:', error);
+          setContent(DEFAULT_CONTENT);
+        }
+      } else {
         setContent(DEFAULT_CONTENT);
       }
-    } else {
-      console.log('ℹ️ No hay contenido guardado, usando valores por defecto');
-      setContent(DEFAULT_CONTENT);
+      setIsLoading(false);
+      return;
     }
+
+    try {
+      // Cargar todas las secciones
+      const [heroRes, aboutRes, booksRes, galleryRes, blogRes, servicesRes, eventsRes] = await Promise.all([
+        supabase.from('hero_section').select('*').single(),
+        supabase.from('about_section').select('*').single(),
+        supabase.from('books').select('*'),
+        supabase.from('gallery_images').select('*'),
+        supabase.from('blog_posts').select('*'),
+        supabase.from('services').select('*'),
+        supabase.from('events').select('*'),
+      ]);
+
+      // Construir objeto de contenido
+      const loadedContent = {
+        heroSection: heroRes.data ? {
+          title: heroRes.data.title || '',
+          description: heroRes.data.description || DEFAULT_CONTENT.heroSection.description,
+          backgroundImageDesktop: heroRes.data.background_image_desktop || DEFAULT_CONTENT.heroSection.backgroundImageDesktop,
+          backgroundImageMobile: heroRes.data.background_image_mobile || DEFAULT_CONTENT.heroSection.backgroundImageMobile,
+          logoImage: heroRes.data.logo_image || DEFAULT_CONTENT.heroSection.logoImage,
+          buttonText: heroRes.data.button_text || 'Hablemos'
+        } : DEFAULT_CONTENT.heroSection,
+
+        aboutSection: aboutRes.data ? {
+          title: aboutRes.data.title || 'Sobre mí',
+          biography: aboutRes.data.biography || DEFAULT_CONTENT.aboutSection.biography,
+          authorImage: aboutRes.data.author_image || null,
+        } : DEFAULT_CONTENT.aboutSection,
+
+        booksSection: {
+          title: 'Mis Libros',
+          books: (booksRes.data || []).map(book => ({
+            id: book.id,
+            title: book.title,
+            coverImage: book.cover_image,
+          }))
+        },
+
+        gallerySection: {
+          title: 'Galería',
+          images: (galleryRes.data || []).map(img => ({
+            id: img.id,
+            image: img.image,
+          }))
+        },
+
+        eventsSection: {
+          title: 'Eventos',
+          events: (eventsRes.data || []).map(event => ({
+            id: event.id,
+            eventName: event.event_name,
+            eventDescription: event.event_description,
+            eventDate: event.event_date,
+            eventTime: event.event_time,
+            eventLocation: event.event_location,
+          }))
+        },
+
+        servicesSection: {
+          title: 'Servicios',
+          buttonText: 'Hablemos',
+          services: (servicesRes.data || []).map(service => ({
+            id: service.id,
+            title: service.title,
+            description: service.description,
+            icon: service.icon,
+          }))
+        },
+
+        blogSection: {
+          title: 'Blog',
+          buttonText: 'Hablemos',
+          posts: (blogRes.data || []).map(post => ({
+            id: post.id,
+            title: post.title,
+            description: post.description,
+            content: post.content,
+            date: post.date_created,
+            featured: post.featured,
+            featuredImage: post.featured_image,
+          }))
+        }
+      };
+
+      console.log('✅ Contenido cargado desde Supabase');
+      setContent(loadedContent);
+    } catch (error) {
+      console.error('❌ Error al cargar desde Supabase:', error);
+      // Fallback a localStorage
+      const savedContent = localStorage.getItem(STORAGE_KEY);
+      if (savedContent) {
+        try {
+          const parsed = JSON.parse(savedContent);
+          setContent(parsed);
+        } catch (e) {
+          setContent(DEFAULT_CONTENT);
+        }
+      } else {
+        setContent(DEFAULT_CONTENT);
+      }
+    }
+    
     setIsLoading(false);
   }, []);
 
@@ -133,35 +248,114 @@ export const useAdminContent = () => {
     };
   }, [loadContent]);
 
-  // Guardar contenido en localStorage con fallback a Supabase
-  const saveContent = (newContent) => {
+  // Guardar contenido en Supabase (con fallback a localStorage)
+  const saveContent = async (newContent) => {
     try {
-      const jsonString = JSON.stringify(newContent);
-      const sizeInBytes = jsonString.length;
-      const sizeInMB = (sizeInBytes / 1024 / 1024).toFixed(2);
+      console.log('💾 Intentando guardar contenido...');
       
-      console.log(`💾 Intentando guardar ${sizeInMB}MB de datos`);
-      
-      // Verificar límite antes de guardar
-      if (sizeInBytes > 5000000) {
-        const error = new Error(`Datos demasiado grandes (${sizeInMB}MB). Límite: ~5MB`);
-        console.error('Error:', error.message);
-        throw error;
+      // Si Supabase no está configurado, guardar solo en localStorage
+      if (!supabase) {
+        console.log('⚠️ Supabase no configurado, guardando en localStorage');
+        const jsonString = JSON.stringify(newContent);
+        const sizeInMB = (jsonString.length / 1024 / 1024).toFixed(2);
+        
+        if (jsonString.length > 5000000) {
+          return { 
+            success: false, 
+            error: `Datos demasiado grandes (${sizeInMB}MB). Límite: ~5MB` 
+          };
+        }
+        
+        localStorage.setItem(STORAGE_KEY, jsonString);
+        setContent(newContent);
+        window.dispatchEvent(new Event('admin-content-updated'));
+        return { success: true, sizeInMB };
       }
-      
-      localStorage.setItem(STORAGE_KEY, jsonString);
+
+      // Guardar en Supabase
+      const { heroSection, aboutSection, booksSection, gallerySection, blogSection, servicesSection, eventsSection } = newContent;
+
+      // Guardar hero_section
+      await supabase.from('hero_section').update({
+        title: heroSection.title,
+        description: heroSection.description,
+        background_image_desktop: heroSection.backgroundImageDesktop,
+        background_image_mobile: heroSection.backgroundImageMobile,
+        logo_image: heroSection.logoImage,
+        button_text: heroSection.buttonText,
+      }).eq('id', 1);
+
+      // Guardar about_section
+      await supabase.from('about_section').update({
+        title: aboutSection.title,
+        biography: aboutSection.biography,
+        author_image: aboutSection.authorImage,
+      }).eq('id', 1);
+
+      // Limpiar y guardar libros
+      await supabase.from('books').delete().neq('id', -1);
+      for (const book of booksSection.books) {
+        await supabase.from('books').insert({
+          id: book.id,
+          title: book.title,
+          cover_image: book.coverImage,
+        });
+      }
+
+      // Limpiar y guardar imágenes de galería
+      await supabase.from('gallery_images').delete().neq('id', -1);
+      for (const img of gallerySection.images) {
+        await supabase.from('gallery_images').insert({
+          id: img.id,
+          image: img.image,
+        });
+      }
+
+      // Limpiar y guardar servicios
+      await supabase.from('services').delete().neq('id', -1);
+      for (const service of servicesSection.services) {
+        await supabase.from('services').insert({
+          id: service.id,
+          title: service.title,
+          description: service.description,
+          icon: service.icon,
+        });
+      }
+
+      // Limpiar y guardar eventos
+      await supabase.from('events').delete().neq('id', -1);
+      for (const event of eventsSection.events) {
+        await supabase.from('events').insert({
+          id: event.id,
+          event_name: event.eventName,
+          event_description: event.eventDescription,
+          event_date: event.eventDate,
+          event_time: event.eventTime,
+          event_location: event.eventLocation,
+        });
+      }
+
+      // Limpiar y guardar posts del blog
+      await supabase.from('blog_posts').delete().neq('id', -1);
+      for (const post of blogSection.posts) {
+        await supabase.from('blog_posts').insert({
+          id: post.id,
+          title: post.title,
+          description: post.description,
+          content: post.content,
+          date_created: post.date,
+          featured: post.featured,
+          featured_image: post.featuredImage,
+        });
+      }
+
       setContent(newContent);
-      
-      // Disparar evento personalizado para que otros componentes se enteren
-      console.log('📢 Disparando evento de cambio de contenido');
       window.dispatchEvent(new Event('admin-content-updated'));
-      
-      console.log(`✅ Datos guardados exitosamente (${sizeInMB}MB)`);
-      return { success: true, sizeInMB };
+      console.log('✅ Contenido guardado exitosamente en Supabase');
+      return { success: true };
     } catch (error) {
       console.error('Error al guardar contenido:', error);
       
-      // Manejar errores específicos
       if (error.name === 'QuotaExceededError' || error.code === 22) {
         return { 
           success: false, 
@@ -259,7 +453,7 @@ export const useAdminContent = () => {
         ...data
       }
     };
-    saveContent(updatedContent);
+    return saveContent(updatedContent);
   };
 
   // Resetear al contenido por defecto

@@ -88,7 +88,7 @@ export default function EventsSectionEditor() {
     }));
   };
 
-  const handleSaveEvent = () => {
+  const handleSaveEvent = async () => {
     // Validar campos
     if (!formData.eventName.trim()) {
       toast({ title: '⚠️ Error', description: 'El nombre del evento es requerido' });
@@ -119,24 +119,28 @@ export default function EventsSectionEditor() {
 
     let updatedEvents;
     if (editingId !== null) {
-      // Editar evento existente
+      // Editar evento existente (mantener el id)
       updatedEvents = [...events];
-      updatedEvents[editingId] = eventToSave;
+      updatedEvents[editingId] = {
+        id: events[editingId].id,
+        ...eventToSave
+      };
       toast({ title: '✅ Éxito', description: 'Evento actualizado correctamente' });
     } else {
-      // Agregar nuevo evento
-      updatedEvents = [...events, eventToSave];
+      // Agregar nuevo evento con id único
+      const newId = events.length > 0 ? Math.max(...events.map(e => e.id || 0)) + 1 : 1;
+      updatedEvents = [...events, { id: newId, ...eventToSave }];
       toast({ title: '✅ Éxito', description: 'Evento agregado correctamente' });
     }
 
     console.log('💾 Evento guardado:', eventToSave);
-    updateSection('eventsSection', { events: updatedEvents });
+    await updateSection('eventsSection', { events: updatedEvents });
     handleCancel();
   };
 
-  const handleDeleteEvent = (index) => {
+  const handleDeleteEvent = async (index) => {
     const updatedEvents = events.filter((_, i) => i !== index);
-    updateSection('eventsSection', { events: updatedEvents });
+    await updateSection('eventsSection', { events: updatedEvents });
     toast({ title: '✅ Eliminado', description: 'Evento eliminado correctamente' });
   };
 
