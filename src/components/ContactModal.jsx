@@ -111,23 +111,21 @@ export const ContactModal = ({ isOpen, onClose }) => {
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             style={{
               position: 'fixed',
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               zIndex: 50,
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              width: 'calc(100% - 32px)',
-              maxWidth: '500px'
+              padding: '16px'
             }}
-            className=""
+            className="pointer-events-none"
           >
-            <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
+            <div className="bg-white rounded-lg shadow-2xl overflow-hidden w-full max-w-md pointer-events-auto max-h-[90vh] overflow-y-auto">
               {/* Header */}
               <div className="bg-gradient-to-r from-[#ECBE8F] to-[#D4A574] px-6 py-6 relative">
                 <button
