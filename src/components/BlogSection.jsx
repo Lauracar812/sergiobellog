@@ -126,6 +126,7 @@ const BlogSection = () => {
           <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
             {/* Grid de 3 columnas */}
             <motion.div
+              id="blog-grid"
               variants={containerVariants}
               initial="hidden"
               whileInView="show"
@@ -325,13 +326,13 @@ const BlogSection = () => {
       {/* Responsive styles */}
       <style>{`
         @media (max-width: 1024px) {
-          [style*="gridTemplateColumns: repeat(3"] {
+          #blog-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
         
         @media (max-width: 640px) {
-          [style*="gridTemplateColumns: repeat(3"] {
+          #blog-grid {
             grid-template-columns: 1fr !important;
             gap: 20px !important;
           }
