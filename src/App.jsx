@@ -30,12 +30,24 @@ function Home() {
             <HeroSection />
           </div>
           <div style={{ height: '50px', backgroundColor: 'white' }}></div>
-          <AboutSection />
-          <BooksSection />
-          <GallerySection />
-          <EventsSection />
-          <ServicesSection />
-          <BlogSection />
+          <section id="about">
+            <AboutSection />
+          </section>
+          <section id="books">
+            <BooksSection />
+          </section>
+          <section id="gallery">
+            <GallerySection />
+          </section>
+          <section id="events">
+            <EventsSection />
+          </section>
+          <section id="services">
+            <ServicesSection />
+          </section>
+          <section id="blog">
+            <BlogSection />
+          </section>
         </main>
         <Toaster />
       </div>
