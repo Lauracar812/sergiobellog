@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAdminContent } from '@/hooks/useAdminContent';
+import { useContactModal } from '@/context/ContactModalContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function BooksSection() {
   const { content } = useAdminContent();
+  const { setIsOpen } = useContactModal();
   const [booksData, setBooksData] = useState(content?.booksSection || {
     title: 'Mis Libros',
     books: [],
@@ -159,6 +161,7 @@ export default function BooksSection() {
           className="flex justify-center"
         >
           <button
+            onClick={() => setIsOpen(true)}
             style={{
               backgroundColor: '#353535',
               color: '#FFFFFF',

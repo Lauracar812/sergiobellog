@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Home, LogOut, Settings, Image, Users, BookOpen, ImageIcon, Calendar, Briefcase, FileText } from 'lucide-react';
+import { Home, LogOut, Settings, Image, Users, BookOpen, ImageIcon, Calendar, Briefcase, FileText, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const AdminSidebar = ({ 
@@ -17,6 +17,7 @@ const AdminSidebar = ({
     { id: 'events', label: 'Eventos', icon: Calendar },
     { id: 'services', label: 'Servicios', icon: Briefcase },
     { id: 'blog', label: 'Blog', icon: FileText },
+    { id: 'messages', label: 'Mensajes', icon: Mail },
     { id: 'settings', label: 'Configuración', icon: Settings }
   ];
 

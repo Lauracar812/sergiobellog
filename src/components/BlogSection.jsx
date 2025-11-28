@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAdminContent } from '@/hooks/useAdminContent';
+import { useContactModal } from '@/context/ContactModalContext';
 
 const BlogSection = () => {
   const { content } = useAdminContent();
+  const { setIsOpen } = useContactModal();
   const { title, posts, buttonText } = content?.blogSection || {
     title: 'Blog',
     posts: [],
@@ -287,6 +289,7 @@ const BlogSection = () => {
             style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}
           >
             <button
+              onClick={() => setIsOpen(true)}
               style={{
                 backgroundColor: '#353535',
                 color: '#FFFFFF',

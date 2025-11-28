@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useAdminContent } from '@/hooks/useAdminContent';
+import { useContactModal } from '@/context/ContactModalContext';
 
 const HeroSection = () => {
   const {
     toast
   } = useToast();
+  const { setIsOpen } = useContactModal();
   const { content, isLoading } = useAdminContent();
   const [heroContent, setHeroContent] = useState(content.heroSection);
 
@@ -21,10 +23,7 @@ const HeroSection = () => {
   }
 
   const handleHablemosClick = () => {
-    toast({
-      title: "🚧 Esta función aún no está implementada",
-      description: "¡No te preocupes! Puedes solicitarla en tu próximo mensaje. 🚀"
-    });
+    setIsOpen(true);
   };
 
   return <section className="relative min-h-screen w-full overflow-hidden">

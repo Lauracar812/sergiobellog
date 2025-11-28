@@ -1,8 +1,10 @@
 import React from 'react';
 import { useAdminContent } from '@/hooks/useAdminContent';
+import { useContactModal } from '@/context/ContactModalContext';
 
 const ServicesSection = () => {
   const { content } = useAdminContent();
+  const { setIsOpen } = useContactModal();
   const { title, services, buttonText } = content.servicesSection || { 
     title: 'Servicios',
     services: [],
@@ -131,6 +133,7 @@ const ServicesSection = () => {
         {/* Botón */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <button
+            onClick={() => setIsOpen(true)}
             style={{
               backgroundColor: '#353535',
               color: '#FFFFFF',
