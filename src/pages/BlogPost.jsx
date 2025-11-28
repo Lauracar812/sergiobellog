@@ -15,13 +15,14 @@ const BlogPost = () => {
 
   useEffect(() => {
     const allPosts = content?.blogSection?.posts || [];
-    const currentPost = allPosts.find(p => p.id === parseInt(id));
+    const idToFind = String(id);
+    const currentPost = allPosts.find(p => String(p.id) === idToFind);
     
     if (currentPost) {
       setPost(currentPost);
       // Obtener posts relacionados (excluyendo el actual)
       const related = allPosts
-        .filter(p => p.id !== parseInt(id))
+        .filter(p => String(p.id) !== idToFind)
         .slice(0, 3);
       setRelatedPosts(related);
     } else {
