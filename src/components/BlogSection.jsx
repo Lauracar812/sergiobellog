@@ -59,7 +59,7 @@ const BlogSection = () => {
           whileInView="show"
           style={{
             display: 'grid',
-            gridTemplateColumns: featuredPost ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+            gridTemplateColumns: featuredPost && posts.length > 1 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '30px',
             width: '100%',
             maxWidth: '1200px',
