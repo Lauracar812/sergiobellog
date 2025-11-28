@@ -33,6 +33,42 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
   eventsSection: {
     title: 'Eventos',
     events: []
+  },
+  servicesSection: {
+    title: 'Servicios',
+    buttonText: 'Hablemos',
+    services: [
+      {
+        id: 1,
+        title: 'Escritor',
+        description: 'Contenido inspirador y transformador',
+        icon: null
+      },
+      {
+        id: 2,
+        title: 'Coach de Vida',
+        description: 'Desarrollo personal y empoderamiento',
+        icon: null
+      },
+      {
+        id: 3,
+        title: 'Asesor Personal y Empresarial',
+        description: 'Asesoría especializada para tu crecimiento',
+        icon: null
+      },
+      {
+        id: 4,
+        title: 'Conferencista',
+        description: 'Conferencias motivacionales e inspiradoras',
+        icon: null
+      },
+      {
+        id: 5,
+        title: 'Director de Arimes',
+        description: 'Dirección y gestión estratégica',
+        icon: null
+      }
+    ]
   }
 };
 

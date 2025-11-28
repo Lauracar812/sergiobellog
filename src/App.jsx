@@ -8,6 +8,7 @@ import AboutSection from '@/components/AboutSection';
 import BooksSection from '@/components/BooksSection';
 import GallerySection from '@/components/GallerySection';
 import EventsSection from '@/components/EventsSection';
+import ServicesSection from '@/components/ServicesSection';
 import { Toaster } from '@/components/ui/toaster';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLogin from '@/pages/AdminLogin';
@@ -31,6 +32,7 @@ function Home() {
           <BooksSection />
           <GallerySection />
           <EventsSection />
+          <ServicesSection />
         </main>
         <Toaster />
       </div>
