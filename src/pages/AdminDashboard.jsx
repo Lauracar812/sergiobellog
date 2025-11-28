@@ -8,6 +8,7 @@ import BooksSectionEditor from '@/components/admin/BooksSectionEditor';
 import GallerySectionEditor from '@/components/admin/GallerySectionEditor';
 import EventsSectionEditor from '@/components/admin/EventsSectionEditor';
 import ServicesSectionEditor from '@/components/admin/ServicesSectionEditor';
+import BlogSectionEditor from '@/components/admin/BlogSectionEditor';
 import { LogOut } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -33,6 +34,8 @@ export default function AdminDashboard() {
         return '📅 Gestor de Eventos';
       case 'services':
         return '💼 Gestor de Servicios';
+      case 'blog':
+        return '📝 Gestor de Blog';
       case 'settings':
         return '⚙️ Configuración';
       default:
@@ -116,6 +119,12 @@ export default function AdminDashboard() {
             {activeSection === 'services' && (
               <div>
                 <ServicesSectionEditor />
+              </div>
+            )}
+
+            {activeSection === 'blog' && (
+              <div>
+                <BlogSectionEditor />
               </div>
             )}
 

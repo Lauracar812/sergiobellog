@@ -69,6 +69,11 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
         icon: null
       }
     ]
+  },
+  blogSection: {
+    title: 'Blog',
+    buttonText: 'Hablemos',
+    posts: []
   }
 };
 
