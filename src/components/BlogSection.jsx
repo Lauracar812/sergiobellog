@@ -333,6 +333,7 @@ const BlogSection = () => {
         @media (max-width: 640px) {
           [style*="gridTemplateColumns: repeat(3"] {
             grid-template-columns: 1fr !important;
+            gap: 20px !important;
           }
         }
       `}</style>

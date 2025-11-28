@@ -79,6 +79,7 @@ const ServicesSection = () => {
                   overflow: 'hidden',
                   padding: '10px'
                 }}
+                className="responsive-icon"
               >
                 {service.icon ? (
                   typeof service.icon === 'string' && service.icon.startsWith('data:') ? (
@@ -130,36 +131,57 @@ const ServicesSection = () => {
           ))}
         </div>
 
-        {/* Botón */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button
-            onClick={() => setIsOpen(true)}
-            style={{
-              backgroundColor: '#353535',
-              color: '#FFFFFF',
-              fontSize: '30px',
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 400,
-              padding: '10px 30px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              border: 'none',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#454545';
-              e.target.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = '#353535';
-              e.target.style.transform = 'translateY(0)';
-            }}
-          >
-            {buttonText}
-          </button>
-        </div>
       </div>
-    </section>
+
+      {/* Responsive styles para servicios */}
+      <style>{`
+        @media (max-width: 768px) {
+          [style*="gridTemplateColumns: repeat(5"] {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 20px !important;
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .responsive-icon {
+            width: 70px !important;
+            height: 70px !important;
+            font-size: 18px !important;
+            margin-bottom: 15px !important;
+          }
+        }
+      `}</style>
+
+      {/* Botón */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <button
+          onClick={() => setIsOpen(true)}
+          style={{
+            backgroundColor: '#353535',
+            color: '#FFFFFF',
+            fontSize: '30px',
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: 400,
+            padding: '10px 30px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            border: 'none',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#454545';
+            e.target.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = '#353535';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          {buttonText}
+        </button>
+      </div>
+    </div>
+  </section>
   );
 };
 

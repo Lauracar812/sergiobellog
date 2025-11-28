@@ -114,7 +114,17 @@ export const ContactModal = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4"
+            style={{
+              position: 'fixed',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 50,
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              width: '100%'
+            }}
+            className="max-w-md mx-4"
           >
             <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
               {/* Header */}
