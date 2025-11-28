@@ -142,7 +142,7 @@ export default function BlogSectionEditor() {
             setBlogData(updated);
             saveContent({ ...content, blogSection: updated });
           }}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
         />
       </div>
 
@@ -159,7 +159,7 @@ export default function BlogSectionEditor() {
             setBlogData(updated);
             saveContent({ ...content, blogSection: updated });
           }}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
         />
       </div>
 
@@ -180,7 +180,7 @@ export default function BlogSectionEditor() {
               value={formData.title}
               onChange={handleInputChange}
               placeholder="Título del post"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
             />
           </div>
 
@@ -193,7 +193,7 @@ export default function BlogSectionEditor() {
               value={formData.excerpt}
               onChange={handleInputChange}
               placeholder="Breve resumen del post"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[100px]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[100px] text-gray-900"
             />
           </div>
 
@@ -206,7 +206,7 @@ export default function BlogSectionEditor() {
               value={formData.content}
               onChange={handleInputChange}
               placeholder="Contenido completo del post"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[200px]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[200px] text-gray-900"
             />
           </div>
 
@@ -220,7 +220,7 @@ export default function BlogSectionEditor() {
                 name="date"
                 value={formData.date}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
               />
             </div>
 
