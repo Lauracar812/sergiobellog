@@ -45,7 +45,9 @@ const Header = () => {
         isScrolled ? 'shadow-lg' : ''
       }`}
       style={{
-        background: 'linear-gradient(to right, rgba(236, 190, 143, 0.30), rgba(190, 149, 86, 0.30))'
+        background: isScrolled 
+          ? '#353535' 
+          : 'linear-gradient(to right, rgba(236, 190, 143, 0.30), rgba(190, 149, 86, 0.30))'
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
