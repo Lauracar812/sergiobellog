@@ -56,7 +56,7 @@ export const ContactModal = ({ isOpen, onClose }) => {
 
     try {
       // Llamar a la API del backend
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
       const response = await fetch(`${backendUrl}/api/contact-messages`, {
         method: 'POST',
         headers: {
@@ -242,7 +242,7 @@ export const ContactModal = ({ isOpen, onClose }) => {
                       onChange={handleChange}
                       placeholder="Cuéntame tu consulta..."
                       rows="4"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ECBE8F] transition resize-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ECBE8F] transition resize-none text-black"
                       disabled={loading}
                     />
                   </div>
