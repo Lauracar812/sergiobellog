@@ -78,8 +78,8 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
             variants={itemVariants} 
             className="space-y-6"
             style={{ 
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 400,
+              fontFamily: 'Poppins-Regular',
+              fontWeight: 'normal',
               fontSize: '15px',
               textAlign: 'left',
             }}

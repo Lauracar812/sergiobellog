@@ -244,7 +244,7 @@ export default function AboutSectionEditor() {
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Biografía</label>
-            
+
             {/* Toolbar */}
             <div className="flex gap-2 mb-2 p-2 bg-gray-700 rounded-t-lg border border-gray-300 border-b-0 flex-wrap">
               <button
@@ -401,7 +401,7 @@ export default function AboutSectionEditor() {
           >
             💾 Guardar Cambios
           </motion.button>
-          
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

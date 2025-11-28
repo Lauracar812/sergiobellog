@@ -191,10 +191,10 @@ export default function EventsCalendar({ events = [] }) {
                           : 'hover:bg-gray-100'
                         }
                       `}
-                      style={selected ? { background: 'linear-gradient(135deg, #332C26, #BE9556)', color: 'white' } : 
-                             today ? { background: '#ECBE8F', color: '#332C26', borderColor: '#BE9556' } : 
-                             hasEvent ? { background: '#ECBE8F', color: '#332C26', borderColor: '#ECBE8F' } : 
-                             { backgroundColor: 'white', color: '#332C26' }}
+                      style={selected ? { background: 'linear-gradient(135deg, #332C26, #BE9556)', color: 'white' } :
+                                      today ? { background: '#ECBE8F', color: '#332C26', borderColor: '#BE9556' } :
+                                      hasEvent ? { background: '#ECBE8F', color: '#332C26', borderColor: '#ECBE8F' } :
+                                      { backgroundColor: 'white', color: '#332C26' }}
                       disabled={!day}
                     >
                       {day && (

@@ -45,7 +45,7 @@ const Header = () => {
         isScrolled ? 'shadow-lg' : ''
       }`}
       style={{
-        background: isScrolled ? '#353535' : 'linear-gradient(to right, rgba(236, 190, 143, 0.30), rgba(190, 149, 86, 0.30))'
+        background: 'linear-gradient(to right, rgba(236, 190, 143, 0.30), rgba(190, 149, 86, 0.30))'
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,9 +97,7 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden border-t border-white/10 ${
-              isScrolled ? 'bg-[#2a2a2a]' : 'bg-[#BE9556]'
-            }`}
+            className="md:hidden bg-[#BE9556] border-t border-white/10"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {menuItems.map((item) => (

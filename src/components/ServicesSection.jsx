@@ -1,10 +1,9 @@
 import React from 'react';
 import { useAdminContent } from '@/hooks/useAdminContent';
-import Lucide from 'lucide-react';
 
 const ServicesSection = () => {
   const { content } = useAdminContent();
-  const { title, services, buttonText } = content.servicesSection || {
+  const { title, services, buttonText } = content.servicesSection || { 
     title: 'Servicios',
     services: [],
     buttonText: 'Hablemos'
