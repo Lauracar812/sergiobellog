@@ -40,17 +40,22 @@ const ServicesSection = () => {
           {title}
         </h2>
 
-        {/* Grid de Servicios - 1 fila (5 columnas) */}
+        {/* Grid de Servicios - 1 fila (5 columnas) centrado */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '40px',
-            maxWidth: '100%',
-            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'center',
             marginBottom: '50px'
           }}
         >
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(5, 1fr)',
+              gap: '40px',
+              maxWidth: 'fit-content'
+            }}
+          >
           {services.map((service) => (
             <div
               key={service.id}
@@ -74,10 +79,27 @@ const ServicesSection = () => {
                   marginBottom: '20px',
                   fontSize: '40px',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  overflow: 'hidden'
                 }}
               >
-                {service.icon || getDefaultIcon(service.title)}
+                {service.icon ? (
+                  typeof service.icon === 'string' && service.icon.startsWith('data:') ? (
+                    <img 
+                      src={service.icon} 
+                      alt={service.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  ) : (
+                    service.icon
+                  )
+                ) : (
+                  getDefaultIcon(service.title)
+                )}
               </div>
 
               {/* Título del Servicio */}
@@ -109,6 +131,7 @@ const ServicesSection = () => {
               </p>
             </div>
           ))}
+          </div>
         </div>
 
         {/* Botón */}
