@@ -76,19 +76,19 @@ const BlogSection = () => {
             </p>
           </div>
         ) : (
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: featuredPost && posts.length > 1 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '30px',
-            width: '100%',
-            maxWidth: '1200px',
-            margin: '0 auto 50px'
-          }}
-        >
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: featuredPost && posts.length > 1 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '30px',
+              width: '100%',
+              maxWidth: '1200px',
+              margin: '0 auto 50px'
+            }}
+          >
           {/* Post Destacado */}
           {featuredPost && (
             <motion.div
@@ -253,8 +253,8 @@ const BlogSection = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
+            </div>
+          </motion.div>
         )}
 
         {/* Botón */}
