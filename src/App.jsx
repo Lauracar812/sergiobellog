@@ -10,6 +10,7 @@ import GallerySection from '@/components/GallerySection';
 import EventsSection from '@/components/EventsSection';
 import ServicesSection from '@/components/ServicesSection';
 import BlogSection from '@/components/BlogSection';
+import BlogPost from '@/pages/BlogPost';
 import { Toaster } from '@/components/ui/toaster';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLogin from '@/pages/AdminLogin';
@@ -48,6 +49,9 @@ function App() {
       <Routes>
         {/* Landing principal */}
         <Route path="/" element={<Home />} />
+
+        {/* Blog routes */}
+        <Route path="/blog/:id" element={<BlogPost />} />
         
         {/* Admin routes */}
         <Route path="/admin" element={<AdminLogin />} />

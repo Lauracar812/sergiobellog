@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAdminContent } from '@/hooks/useAdminContent';
+import BlogCarousel from '@/components/BlogCarousel';
 
 const BlogSection = () => {
   const { content } = useAdminContent();
@@ -13,7 +14,10 @@ const BlogSection = () => {
   // Mostrar sección aunque no haya posts (para que sea visible en admin)
   const hasNoPosts = !posts || posts.length === 0;
 
-  // Obtener post destacado y los demás
+  // Obtener posts destacados
+  const featuredPosts = posts && posts.filter(p => p.featured);
+  
+  // Obtener post destacado principal y los demás
   const featuredPost = posts && posts.find(p => p.featured);
   const otherPosts = posts && posts.filter(p => !p.featured).slice(0, 2);
 
@@ -76,6 +80,24 @@ const BlogSection = () => {
             borderRadius: '2px'
           }} />
         </motion.div>
+
+        {/* Carrusel de Posts Destacados */}
+        {!hasNoPosts && featuredPosts && featuredPosts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            style={{
+              width: '100%',
+              maxWidth: '1200px',
+              margin: '0 auto 80px',
+              paddingLeft: '0',
+              paddingRight: '0'
+            }}
+          >
+            <BlogCarousel posts={featuredPosts} />
+          </motion.div>
+        )}
 
         {/* Grid de Posts o Mensaje */}
         {hasNoPosts ? (
