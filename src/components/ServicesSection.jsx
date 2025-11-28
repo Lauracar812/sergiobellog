@@ -43,20 +43,12 @@ const ServicesSection = () => {
         {/* Grid de Servicios - 1 fila (5 columnas) centrado */}
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            width: '100%',
-            marginBottom: '50px'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: '40px',
+            width: 'fit-content',
+            margin: '0 auto 50px auto'
           }}
-        >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gap: '40px',
-              width: '100%',
-              maxWidth: '1400px'
-            }}
           >
             {services.map((service) => (
             <div
@@ -133,7 +125,6 @@ const ServicesSection = () => {
               </p>
             </div>
           ))}
-          </div>
         </div>
 
         {/* Botón */}
