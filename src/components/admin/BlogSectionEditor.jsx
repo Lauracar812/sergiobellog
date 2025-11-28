@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import { useToast } from '@/components/ui/use-toast';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Edit2, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function BlogSectionEditor() {
   const { content, saveContent } = useAdminContent();
@@ -12,14 +12,16 @@ export default function BlogSectionEditor() {
     posts: []
   });
   const [editingPost, setEditingPost] = useState(null);
+  const [expandedPost, setExpandedPost] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
-    excerpt: '',
+    description: '',
     content: '',
     date: new Date().toISOString().split('T')[0],
     featured: false,
     featuredImage: null
   });
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (content?.blogSection) {
@@ -31,17 +33,21 @@ export default function BlogSectionEditor() {
     setEditingPost(null);
     setFormData({
       title: '',
-      excerpt: '',
+      description: '',
       content: '',
       date: new Date().toISOString().split('T')[0],
       featured: false,
       featuredImage: null
     });
+    setShowForm(true);
+    setExpandedPost(null);
   };
 
   const handleEditPost = (post) => {
     setEditingPost(post.id);
     setFormData(post);
+    setShowForm(true);
+    setExpandedPost(null);
   };
 
   const handleInputChange = (e) => {
@@ -61,6 +67,10 @@ export default function BlogSectionEditor() {
           ...formData,
           featuredImage: event.target.result
         });
+        toast({
+          title: 'Éxito',
+          description: 'Imagen cargada correctamente'
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -71,6 +81,24 @@ export default function BlogSectionEditor() {
       toast({
         title: 'Error',
         description: 'El título del post es requerido',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      toast({
+        title: 'Error',
+        description: 'La descripción del post es requerida',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (!formData.content.trim()) {
+      toast({
+        title: 'Error',
+        description: 'El contenido del post es requerido',
         variant: 'destructive'
       });
       return;
@@ -103,10 +131,11 @@ export default function BlogSectionEditor() {
 
     setBlogData(updatedBlog);
     saveContent({ ...content, blogSection: updatedBlog });
+    setShowForm(false);
     setEditingPost(null);
     setFormData({
       title: '',
-      excerpt: '',
+      description: '',
       content: '',
       date: new Date().toISOString().split('T')[0],
       featured: false,
@@ -115,240 +144,314 @@ export default function BlogSectionEditor() {
   };
 
   const handleDeletePost = (id) => {
-    const updatedBlog = {
-      ...blogData,
-      posts: blogData.posts.filter(p => p.id !== id)
-    };
-    setBlogData(updatedBlog);
-    saveContent({ ...content, blogSection: updatedBlog });
-    toast({
-      title: 'Éxito',
-      description: 'Post eliminado correctamente'
+    if (window.confirm('¿Estás seguro de que deseas eliminar este post?')) {
+      const updatedBlog = {
+        ...blogData,
+        posts: blogData.posts.filter(p => p.id !== id)
+      };
+      setBlogData(updatedBlog);
+      saveContent({ ...content, blogSection: updatedBlog });
+      toast({
+        title: 'Éxito',
+        description: 'Post eliminado correctamente'
+      });
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setShowForm(false);
+    setEditingPost(null);
+    setFormData({
+      title: '',
+      description: '',
+      content: '',
+      date: new Date().toISOString().split('T')[0],
+      featured: false,
+      featuredImage: null
     });
   };
 
   return (
     <div className="space-y-6">
-      {/* Título de la sección */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Título de la sección
-        </label>
-        <input
-          type="text"
-          value={blogData.title}
-          onChange={(e) => {
-            const updated = { ...blogData, title: e.target.value };
-            setBlogData(updated);
-            saveContent({ ...content, blogSection: updated });
-          }}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
-        />
-      </div>
+      {/* Configuración de la sección */}
+      <div className="grid grid-cols-2 gap-6">
+        {/* Título de la sección */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Título de la sección
+          </label>
+          <input
+            type="text"
+            value={blogData.title}
+            onChange={(e) => {
+              const updated = { ...blogData, title: e.target.value };
+              setBlogData(updated);
+              saveContent({ ...content, blogSection: updated });
+            }}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
+          />
+        </div>
 
-      {/* Texto del botón */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Texto del botón
-        </label>
-        <input
-          type="text"
-          value={blogData.buttonText}
-          onChange={(e) => {
-            const updated = { ...blogData, buttonText: e.target.value };
-            setBlogData(updated);
-            saveContent({ ...content, blogSection: updated });
-          }}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
-        />
-      </div>
-
-      {/* Formulario de creación/edición de post */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          {editingPost ? 'Editar Post' : 'Crear Nuevo Post'}
-        </h3>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Título del Post
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              placeholder="Título del post"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Resumen/Excerpt
-            </label>
-            <textarea
-              name="excerpt"
-              value={formData.excerpt}
-              onChange={handleInputChange}
-              placeholder="Breve resumen del post"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[100px] text-gray-900"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Contenido del Post
-            </label>
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleInputChange}
-              placeholder="Contenido completo del post"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[200px] text-gray-900"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Fecha de Publicación
-              </label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
-              />
-            </div>
-
-            <div className="flex items-center gap-4 pt-6">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="featured"
-                  checked={formData.featured}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 rounded border-gray-300"
-                />
-                <span className="text-sm font-medium text-gray-700">Destacado</span>
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Imagen Destacada
-            </label>
-            <input
-              type="file"
-              onChange={handleImageUpload}
-              accept="image/*"
-              className="w-full"
-            />
-            {formData.featuredImage && (
-              <div className="mt-3">
-                <img
-                  src={formData.featuredImage}
-                  alt="Vista previa"
-                  className="max-w-xs h-auto rounded-lg"
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="flex gap-2 pt-4">
-            <button
-              onClick={handleSavePost}
-              className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-medium"
-            >
-              {editingPost ? 'Actualizar Post' : 'Crear Post'}
-            </button>
-            {editingPost && (
-              <button
-                onClick={() => {
-                  setEditingPost(null);
-                  setFormData({
-                    title: '',
-                    excerpt: '',
-                    content: '',
-                    date: new Date().toISOString().split('T')[0],
-                    featured: false,
-                    featuredImage: null
-                  });
-                }}
-                className="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors font-medium"
-              >
-                Cancelar
-              </button>
-            )}
-          </div>
+        {/* Texto del botón */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Texto del botón
+          </label>
+          <input
+            type="text"
+            value={blogData.buttonText}
+            onChange={(e) => {
+              const updated = { ...blogData, buttonText: e.target.value };
+              setBlogData(updated);
+              saveContent({ ...content, blogSection: updated });
+            }}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
+          />
         </div>
       </div>
 
-      {/* Lista de posts */}
+      {/* Botón para agregar nuevo post */}
+      {!showForm && (
+        <button
+          onClick={handleAddPost}
+          className="w-full px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-semibold flex items-center justify-center gap-2"
+        >
+          <Plus size={20} />
+          Crear Nuevo Post
+        </button>
+      )}
+
+      {/* Formulario de creación/edición de post */}
+      {showForm && (
+        <div className="bg-white rounded-lg shadow-sm p-6 border-2 border-amber-500">
+          <h3 className="text-lg font-semibold text-gray-800 mb-6">
+            {editingPost ? '✏️ Editar Post' : '✍️ Nuevo Post'}
+          </h3>
+
+          <div className="space-y-4">
+            {/* Título */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Título del Artículo *
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                placeholder="Ej: Historias de Transformación Personal"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
+              />
+              <p className="text-xs text-gray-500 mt-1">Este será el título visible en el blog</p>
+            </div>
+
+            {/* Descripción breve */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Descripción Breve *
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Resumen del artículo que aparecerá en la lista de posts..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[80px] text-gray-900"
+              />
+              <p className="text-xs text-gray-500 mt-1">Máximo 150 caracteres recomendado</p>
+            </div>
+
+            {/* Contenido completo */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Contenido Completo del Artículo *
+              </label>
+              <textarea
+                name="content"
+                value={formData.content}
+                onChange={handleInputChange}
+                placeholder="Escribe el contenido completo del artículo aquí..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-vertical min-h-[250px] text-gray-900 font-mono text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Puedes usar líneas nuevas para párrafos</p>
+            </div>
+
+            {/* Imagen destacada */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Imagen Destacada del Artículo
+              </label>
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                accept="image/*"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
+              />
+              <p className="text-xs text-gray-500 mt-1">Formatos soportados: JPG, PNG, GIF (máx 5MB)</p>
+              
+              {formData.featuredImage && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Vista previa:</p>
+                  <img
+                    src={formData.featuredImage}
+                    alt="Vista previa"
+                    className="max-w-xs h-auto rounded-lg border border-gray-300"
+                  />
+                  <button
+                    onClick={() => setFormData({ ...formData, featuredImage: null })}
+                    className="mt-2 text-sm text-red-600 hover:text-red-800 font-medium"
+                  >
+                    Eliminar imagen
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Fecha de publicación */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Fecha de Publicación
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-gray-900"
+                />
+              </div>
+
+              {/* Destacado */}
+              <div className="flex items-end">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={handleInputChange}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Marcar como destacado</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Botones de acción */}
+            <div className="flex gap-3 pt-4 border-t">
+              <button
+                onClick={handleSavePost}
+                className="flex-1 px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-medium"
+              >
+                {editingPost ? '📝 Actualizar Post' : '✅ Publicar Post'}
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                className="flex-1 px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors font-medium"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Lista de posts publicados */}
       {blogData.posts && blogData.posts.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Posts Publicados ({blogData.posts.length})
+          <h3 className="text-lg font-semibold text-gray-800 mb-6">
+            📚 Posts Publicados ({blogData.posts.length})
           </h3>
 
           <div className="space-y-3">
             {blogData.posts.map((post) => (
               <div
                 key={post.id}
-                className="flex items-start justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-semibold text-gray-800">{post.title}</h4>
-                    {post.featured && (
-                      <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded font-medium">
-                        Destacado
-                      </span>
-                    )}
+                {/* Header del post */}
+                <div
+                  onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)}
+                  className="p-4 cursor-pointer hover:bg-gray-50 flex items-center justify-between"
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{post.featured ? '⭐' : '📄'}</span>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-800">{post.title}</h4>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-1">{post.description}</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          📅 {new Date(post.date).toLocaleDateString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{post.excerpt}</p>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {new Date(post.date).toLocaleDateString('es-ES', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </p>
+                  <button className="text-gray-400 hover:text-gray-600">
+                    {expandedPost === post.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                  </button>
                 </div>
 
-                <div className="flex gap-2 ml-4">
-                  <button
-                    onClick={() => handleEditPost(post)}
-                    className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm font-medium"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDeletePost(post.id)}
-                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors flex items-center gap-1"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
+                {/* Contenido expandido */}
+                {expandedPost === post.id && (
+                  <div className="border-t border-gray-200 p-4 bg-gray-50 space-y-3">
+                    {post.featuredImage && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-700 mb-2">Vista previa de imagen:</p>
+                        <img
+                          src={post.featuredImage}
+                          alt={post.title}
+                          className="max-w-xs h-auto rounded-lg border border-gray-300"
+                        />
+                      </div>
+                    )}
+
+                    <div>
+                      <p className="text-sm font-semibold text-gray-700 mb-2">Descripción:</p>
+                      <p className="text-sm text-gray-600 bg-white p-3 rounded-lg border border-gray-200">{post.description}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-semibold text-gray-700 mb-2">Contenido:</p>
+                      <div className="text-sm text-gray-600 bg-white p-3 rounded-lg border border-gray-200 max-h-[200px] overflow-y-auto whitespace-pre-wrap">
+                        {post.content}
+                      </div>
+                    </div>
+
+                    {/* Botones de edición y eliminación */}
+                    <div className="flex gap-2 pt-3 border-t">
+                      <button
+                        onClick={() => handleEditPost(post)}
+                        className="flex-1 px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm font-medium flex items-center justify-center gap-1"
+                      >
+                        <Edit2 size={16} />
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDeletePost(post.id)}
+                        className="flex-1 px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm font-medium flex items-center justify-center gap-1"
+                      >
+                        <Trash2 size={16} />
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Botón para agregar nuevo post */}
-      {!editingPost && (
-        <button
-          onClick={handleAddPost}
-          className="w-full px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-semibold flex items-center justify-center gap-2"
-        >
-          <Plus size={20} />
-          Agregar Nuevo Post
-        </button>
+      {/* Mensaje cuando no hay posts */}
+      {blogData.posts && blogData.posts.length === 0 && !showForm && (
+        <div className="bg-amber-50 border-2 border-dashed border-amber-300 rounded-lg p-8 text-center">
+          <p className="text-amber-900 font-medium">
+            No hay posts aún. ¡Crea tu primer artículo!
+          </p>
+        </div>
       )}
     </div>
   );
