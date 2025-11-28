@@ -40,13 +40,13 @@ const ServicesSection = () => {
           {title}
         </h2>
 
-        {/* Grid de Servicios - 2 columnas */}
+        {/* Grid de Servicios - 1 fila (5 columnas) */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(5, 1fr)',
             gap: '40px',
-            maxWidth: '1000px',
+            maxWidth: '100%',
             margin: '0 auto',
             marginBottom: '50px'
           }}
