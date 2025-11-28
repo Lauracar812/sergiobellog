@@ -71,7 +71,7 @@ const ServicesSection = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '20px',
-                  fontSize: '40px',
+                  fontSize: '25px',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                   flexShrink: 0,
                   overflow: 'hidden'
