@@ -10,11 +10,12 @@ const BlogSection = () => {
     buttonText: 'Hablemos'
   };
 
-  if (!posts || posts.length === 0) return null;
+  // Mostrar sección aunque no haya posts (para que sea visible en admin)
+  const hasNoPosts = !posts || posts.length === 0;
 
   // Obtener post destacado y los demás
-  const featuredPost = posts.find(p => p.featured);
-  const otherPosts = posts.filter(p => !p.featured).slice(0, 2);
+  const featuredPost = posts && posts.find(p => p.featured);
+  const otherPosts = posts && posts.filter(p => !p.featured).slice(0, 2);
 
   const container = {
     hidden: { opacity: 0 },
@@ -52,7 +53,29 @@ const BlogSection = () => {
           {title}
         </motion.h2>
 
-        {/* Grid de Posts */}
+        {/* Grid de Posts o Mensaje */}
+        {hasNoPosts ? (
+          <div style={{
+            width: '100%',
+            maxWidth: '1200px',
+            margin: '0 auto 50px',
+            padding: '60px 20px',
+            textAlign: 'center',
+            backgroundColor: '#F5F5F5',
+            borderRadius: '8px',
+            border: '2px dashed #ECBE8F'
+          }}>
+            <p style={{
+              fontFamily: 'Poppins-Regular, sans-serif',
+              fontSize: '18px',
+              color: '#5B5B5B',
+              fontWeight: 'normal',
+              margin: '0'
+            }}>
+              Próximamente nuevas historias y contenido inspirador...
+            </p>
+          </div>
+        ) : (
         <motion.div
           variants={container}
           initial="hidden"
@@ -232,6 +255,7 @@ const BlogSection = () => {
             ))}
           </div>
         </motion.div>
+        )}
 
         {/* Botón */}
         <motion.div
