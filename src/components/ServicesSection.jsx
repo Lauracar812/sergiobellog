@@ -56,7 +56,7 @@ const ServicesSection = () => {
               maxWidth: 'fit-content'
             }}
           >
-          {services.map((service) => (
+            {services.map((service) => (
             <div
               key={service.id}
               style={{
