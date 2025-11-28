@@ -63,8 +63,8 @@ const ServicesSection = () => {
               {/* Ícono Circular */}
               <div
                 style={{
-                  width: '80px',
-                  height: '80px',
+                  width: '100px',
+                  height: '100px',
                   borderRadius: '50%',
                   backgroundColor: '#FFFFFF',
                   display: 'flex',
@@ -74,7 +74,8 @@ const ServicesSection = () => {
                   fontSize: '25px',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                   flexShrink: 0,
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  padding: '10px'
                 }}
               >
                 {service.icon ? (
@@ -133,19 +134,23 @@ const ServicesSection = () => {
             style={{
               backgroundColor: '#353535',
               color: '#FFFFFF',
-              fontFamily: 'Poppins-Regular, sans-serif',
               fontSize: '30px',
-              fontWeight: 'normal',
+              fontFamily: 'Poppins, sans-serif',
+              fontWeight: 400,
               padding: '10px 30px',
-              border: 'none',
+              borderRadius: '8px',
               cursor: 'pointer',
-              textAlign: 'center',
-              transition: 'background-color 0.3s ease',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
+              border: 'none',
+              transition: 'all 0.3s ease'
             }}
-            onMouseEnter={(e) => (e.target.style.backgroundColor = '#505050')}
-            onMouseLeave={(e) => (e.target.style.backgroundColor = '#353535')}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#454545';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#353535';
+              e.target.style.transform = 'translateY(0)';
+            }}
           >
             {buttonText}
           </button>
