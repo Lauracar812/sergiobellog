@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import BlogCarousel from '@/components/BlogCarousel';
 
 const BlogSection = () => {
+  const navigate = useNavigate();
   const { content } = useAdminContent();
   const { title, posts, buttonText } = content.blogSection || {
     title: 'Blog',
@@ -162,7 +164,9 @@ const BlogSection = () => {
                 flexDirection: 'column'
               }}
             >
-              <div style={{
+              <div
+                onClick={() => navigate(`/blog/${featuredPost.id}`)}
+                style={{
                 borderRadius: '12px',
                 overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(51, 44, 38, 0.12)',
@@ -315,6 +319,7 @@ const BlogSection = () => {
               <motion.div
                 key={post.id}
                 variants={item}
+                onClick={() => navigate(`/blog/${post.id}`)}
                 style={{
                   borderRadius: '12px',
                   overflow: 'hidden',
