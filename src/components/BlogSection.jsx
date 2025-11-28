@@ -34,47 +34,88 @@ const BlogSection = () => {
   };
 
   return (
-    <section style={{ backgroundColor: '#FFFFFF', paddingTop: '60px', paddingBottom: '60px' }}>
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
-        {/* Título */}
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
+    <section style={{ backgroundColor: '#FFFFFF', paddingTop: '80px', paddingBottom: '80px', position: 'relative' }}>
+      {/* Background decorative element */}
+      <div style={{
+        position: 'absolute',
+        top: '0',
+        right: '0',
+        width: '400px',
+        height: '400px',
+        backgroundColor: '#ECBE8F',
+        opacity: '0.05',
+        borderRadius: '50%',
+        zIndex: '0'
+      }} />
+
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingLeft: '20px', paddingRight: '20px', maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: '1' }}>
+        {/* Título con subtítulo */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          style={{
-            fontFamily: 'Poppins-Regular, sans-serif',
-            fontSize: '30px',
-            color: '#332C26',
-            textAlign: 'center',
-            marginBottom: '50px',
-            fontWeight: 'normal'
-          }}
+          style={{ textAlign: 'center', marginBottom: '60px', width: '100%' }}
         >
-          {title}
-        </motion.h2>
+          <h2
+            style={{
+              fontFamily: 'Poppins-Regular, sans-serif',
+              fontSize: '42px',
+              color: '#332C26',
+              fontWeight: 'normal',
+              margin: '0 0 15px 0',
+              letterSpacing: '-0.5px'
+            }}
+          >
+            {title}
+          </h2>
+          <div style={{
+            width: '60px',
+            height: '3px',
+            backgroundColor: '#ECBE8F',
+            margin: '0 auto 0 auto',
+            borderRadius: '2px'
+          }} />
+        </motion.div>
 
         {/* Grid de Posts o Mensaje */}
         {hasNoPosts ? (
-          <div style={{
-            width: '100%',
-            maxWidth: '1200px',
-            margin: '0 auto 50px',
-            padding: '60px 20px',
-            textAlign: 'center',
-            backgroundColor: '#F5F5F5',
-            borderRadius: '8px',
-            border: '2px dashed #ECBE8F'
-          }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            style={{
+              width: '100%',
+              maxWidth: '1200px',
+              margin: '0 auto 60px',
+              padding: '80px 40px',
+              textAlign: 'center',
+              backgroundColor: 'rgba(236, 190, 143, 0.08)',
+              borderRadius: '12px',
+              border: '2px dashed #ECBE8F',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <div style={{ fontSize: '60px', marginBottom: '20px' }}>📚</div>
             <p style={{
               fontFamily: 'Poppins-Regular, sans-serif',
-              fontSize: '18px',
+              fontSize: '22px',
+              color: '#332C26',
+              fontWeight: 'normal',
+              margin: '0 0 10px 0',
+              letterSpacing: '-0.3px'
+            }}>
+              Próximamente historias inspiradoras
+            </p>
+            <p style={{
+              fontFamily: 'Poppins-Regular, sans-serif',
+              fontSize: '14px',
               color: '#5B5B5B',
               fontWeight: 'normal',
               margin: '0'
             }}>
-              Próximamente nuevas historias y contenido inspirador...
+              Estamos preparando contenido exclusivo y reflexiones profundas para ti
             </p>
-          </div>
+          </motion.div>
         ) : (
           <motion.div
             variants={container}
@@ -100,24 +141,38 @@ const BlogSection = () => {
               }}
             >
               <div style={{
-                borderRadius: '8px',
+                borderRadius: '12px',
                 overflow: 'hidden',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                boxShadow: '0 8px 32px rgba(51, 44, 38, 0.12)',
                 backgroundColor: '#FFFFFF',
                 border: '2px solid #ECBE8F',
                 display: 'flex',
                 flexDirection: 'column',
-                height: '100%'
-              }}>
+                height: '100%',
+                transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
+                cursor: 'pointer',
+                transform: 'translateY(0)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 16px 48px rgba(51, 44, 38, 0.18)';
+                e.currentTarget.style.transform = 'translateY(-4px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(51, 44, 38, 0.12)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+              >
                 {/* Imagen Destacada o placeholder */}
                 <div style={{
                   width: '100%',
-                  height: '250px',
+                  height: '280px',
                   backgroundColor: featuredPost.featuredImage ? 'transparent' : '#ECBE8F',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  position: 'relative',
+                  background: featuredPost.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)'
                 }}>
                   {featuredPost.featuredImage ? (
                     <img
@@ -126,71 +181,102 @@ const BlogSection = () => {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        objectFit: 'cover',
+                        transition: 'transform 0.3s ease'
                       }}
                     />
                   ) : (
                     <span style={{
                       fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '48px',
+                      fontSize: '56px',
                       color: '#FFFFFF',
                       fontWeight: 'normal'
                     }}>
                       📝
                     </span>
                   )}
+                  {/* Overlay gradient */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.05) 100%)',
+                    pointerEvents: 'none'
+                  }} />
                 </div>
 
                 {/* Contenido */}
-                <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span style={{
                     fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '11px',
                     color: '#ECBE8F',
                     fontWeight: 'normal',
-                    marginBottom: '8px',
+                    marginBottom: '12px',
                     textTransform: 'uppercase',
-                    letterSpacing: '1px'
+                    letterSpacing: '1.2px',
+                    fontWeight: '600'
                   }}>
-                    Destacado
+                    ⭐ Artículo Destacado
                   </span>
 
                   <h3 style={{
                     fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '22px',
+                    fontSize: '26px',
                     color: '#332C26',
                     fontWeight: 'normal',
-                    marginBottom: '10px',
-                    marginTop: '0'
+                    marginBottom: '14px',
+                    marginTop: '0',
+                    lineHeight: '1.3',
+                    letterSpacing: '-0.3px'
                   }}>
                     {featuredPost.title}
                   </h3>
 
                   <p style={{
                     fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '15px',
                     color: '#5B5B5B',
                     fontWeight: 'normal',
-                    lineHeight: '1.6',
-                    marginBottom: '15px',
+                    lineHeight: '1.7',
+                    marginBottom: '20px',
                     flex: 1
                   }}>
-                    {featuredPost.excerpt}
+                    {featuredPost.description}
                   </p>
 
-                  <p style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '12px',
-                    color: '#999999',
-                    fontWeight: 'normal',
-                    marginTop: 'auto'
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingTop: '16px',
+                    borderTop: '1px solid #EBEBEB'
                   }}>
-                    {new Date(featuredPost.date).toLocaleDateString('es-ES', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </p>
+                    <p style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '12px',
+                      color: '#999999',
+                      fontWeight: 'normal',
+                      margin: '0'
+                    }}>
+                      {new Date(featuredPost.date).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                    <span style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '12px',
+                      color: '#ECBE8F',
+                      fontWeight: '600',
+                      letterSpacing: '0.5px'
+                    }}>
+                      Leer más →
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -201,32 +287,47 @@ const BlogSection = () => {
             gridColumn: featuredPost ? '2 / 3' : 'auto',
             display: 'grid',
             gridTemplateColumns: '1fr',
-            gap: '20px'
+            gap: '24px'
           }}>
             {(featuredPost ? otherPosts : posts.slice(0, 3)).map((post) => (
               <motion.div
                 key={post.id}
                 variants={item}
                 style={{
-                  borderRadius: '8px',
+                  borderRadius: '12px',
                   overflow: 'hidden',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                  boxShadow: '0 4px 16px rgba(51, 44, 38, 0.08)',
                   backgroundColor: '#FFFFFF',
                   border: '1px solid #EBEBEB',
                   display: 'flex',
-                  flexDirection: 'row'
+                  flexDirection: 'row',
+                  transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
+                  cursor: 'pointer',
+                  transform: 'translateY(0)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(51, 44, 38, 0.14)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.borderColor = '#ECBE8F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(51, 44, 38, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = '#EBEBEB';
                 }}
               >
                 {/* Imagen pequeña o placeholder */}
                 <div style={{
-                  width: '120px',
-                  height: '120px',
+                  width: '140px',
+                  height: '140px',
                   backgroundColor: post.featuredImage ? 'transparent' : '#ECBE8F',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  background: post.featuredImage ? 'transparent' : 'linear-gradient(135deg, #ECBE8F 0%, #E5B87F 100%)',
+                  position: 'relative'
                 }}>
                   {post.featuredImage ? (
                     <img
@@ -235,59 +336,96 @@ const BlogSection = () => {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        objectFit: 'cover',
+                        transition: 'transform 0.3s ease'
                       }}
                     />
                   ) : (
                     <span style={{
                       fontFamily: 'Poppins-Regular, sans-serif',
-                      fontSize: '32px',
+                      fontSize: '36px',
                       color: '#FFFFFF',
                       fontWeight: 'normal'
                     }}>
                       📝
                     </span>
                   )}
+                  {/* Overlay gradient */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.03) 100%)',
+                    pointerEvents: 'none'
+                  }} />
                 </div>
 
                 {/* Contenido */}
-                <div style={{ padding: '15px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <h4 style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '16px',
-                    color: '#332C26',
-                    fontWeight: 'normal',
-                    marginBottom: '8px',
-                    marginTop: '0'
-                  }}>
-                    {post.title}
-                  </h4>
+                <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
+                  <div>
+                    <h4 style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '18px',
+                      color: '#332C26',
+                      fontWeight: 'normal',
+                      marginBottom: '10px',
+                      marginTop: '0',
+                      lineHeight: '1.4',
+                      letterSpacing: '-0.2px'
+                    }}>
+                      {post.title}
+                    </h4>
 
-                  <p style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '12px',
-                    color: '#5B5B5B',
-                    fontWeight: 'normal',
-                    lineHeight: '1.4',
-                    marginBottom: '10px',
-                    flex: 1
-                  }}>
-                    {post.excerpt}
-                  </p>
+                    <p style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '13px',
+                      color: '#5B5B5B',
+                      fontWeight: 'normal',
+                      lineHeight: '1.6',
+                      marginBottom: '0',
+                      margin: '0',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}>
+                      {post.description}
+                    </p>
+                  </div>
 
-                  <p style={{
-                    fontFamily: 'Poppins-Regular, sans-serif',
-                    fontSize: '11px',
-                    color: '#999999',
-                    fontWeight: 'normal',
-                    margin: '0'
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: '14px',
+                    paddingTop: '12px',
+                    borderTop: '1px solid #EBEBEB'
                   }}>
-                    {new Date(post.date).toLocaleDateString('es-ES', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </p>
+                    <p style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '11px',
+                      color: '#999999',
+                      fontWeight: 'normal',
+                      margin: '0'
+                    }}>
+                      {new Date(post.date).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </p>
+                    <span style={{
+                      fontFamily: 'Poppins-Regular, sans-serif',
+                      fontSize: '11px',
+                      color: '#ECBE8F',
+                      fontWeight: '600',
+                      letterSpacing: '0.3px'
+                    }}>
+                      →
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -300,28 +438,33 @@ const BlogSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}
         >
           <button
             style={{
               backgroundColor: '#353535',
               color: '#FFFFFF',
-              fontSize: '30px',
+              fontSize: '16px',
               fontFamily: 'Poppins, sans-serif',
               fontWeight: 400,
-              padding: '10px 30px',
+              padding: '14px 40px',
               borderRadius: '8px',
               cursor: 'pointer',
               border: 'none',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s cubic-bezier(0.23, 1, 0.320, 1)',
+              letterSpacing: '0.5px',
+              textTransform: 'uppercase',
+              boxShadow: '0 4px 12px rgba(53, 53, 53, 0.2)'
             }}
             onMouseEnter={(e) => {
               e.target.style.backgroundColor = '#454545';
               e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 8px 20px rgba(53, 53, 53, 0.28)';
             }}
             onMouseLeave={(e) => {
               e.target.style.backgroundColor = '#353535';
               e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 12px rgba(53, 53, 53, 0.2)';
             }}
           >
             {buttonText}
