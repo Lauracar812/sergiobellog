@@ -122,9 +122,10 @@ export const ContactModal = ({ isOpen, onClose }) => {
               zIndex: 50,
               maxHeight: '90vh',
               overflowY: 'auto',
-              width: '100%'
+              width: 'calc(100% - 32px)',
+              maxWidth: '500px'
             }}
-            className="max-w-md mx-4"
+            className=""
           >
             <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
               {/* Header */}
