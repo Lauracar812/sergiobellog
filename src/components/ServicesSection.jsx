@@ -49,8 +49,8 @@ const ServicesSection = () => {
             width: 'fit-content',
             margin: '0 auto 50px auto'
           }}
-          >
-            {services.map((service) => (
+        >
+          {services.map((service) => (
             <div
               key={service.id}
               style={{
