@@ -148,6 +148,7 @@ export const useAdminContent = () => {
             id: book.id,
             title: book.title,
             coverImage: book.cover_image,
+            purchaseLink: book.purchase_link || '',
           }))
         },
 
@@ -299,6 +300,7 @@ export const useAdminContent = () => {
           id: book.id,
           title: book.title,
           cover_image: book.coverImage,
+          purchase_link: book.purchaseLink || '',
         });
       }
 
