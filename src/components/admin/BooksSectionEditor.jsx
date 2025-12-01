@@ -93,6 +93,7 @@ export default function BooksSectionEditor() {
         id: Math.random(),
         title: 'Nuevo Libro',
         coverImage: compressedBase64,
+        purchaseLink: '',
       };
 
       setFormData(prev => ({
@@ -119,6 +120,15 @@ export default function BooksSectionEditor() {
       ...prev,
       books: prev.books.map(book => 
         book.id === bookId ? { ...book, title: newTitle } : book
+      ),
+    }));
+  };
+
+  const handleUpdateBookLink = (bookId, newLink) => {
+    setFormData(prev => ({
+      ...prev,
+      books: prev.books.map(book => 
+        book.id === bookId ? { ...book, purchaseLink: newLink } : book
       ),
     }));
   };
@@ -226,13 +236,20 @@ export default function BooksSectionEditor() {
                       alt={book.title}
                       className="w-full h-64 object-cover"
                     />
-                    <div className="p-2 bg-white flex-1 flex flex-col">
+                    <div className="p-2 bg-white flex-1 flex flex-col gap-1">
                       <input
                         type="text"
                         value={book.title}
                         onChange={(e) => handleUpdateBookTitle(book.id, e.target.value)}
                         className="w-full text-xs font-semibold text-gray-800 bg-transparent border-none focus:outline-none"
                         placeholder="Título del libro"
+                      />
+                      <input
+                        type="url"
+                        value={book.purchaseLink || ''}
+                        onChange={(e) => handleUpdateBookLink(book.id, e.target.value)}
+                        className="w-full text-xs text-blue-600 bg-gray-50 border border-gray-200 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        placeholder="https://link-de-compra.com"
                       />
                     </div>
                   </div>

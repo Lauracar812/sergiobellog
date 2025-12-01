@@ -129,12 +129,28 @@ export default function BooksSection() {
                   className="flex flex-col items-center flex-shrink-0 w-full sm:w-auto"
                   layout
                 >
-                  <img
-                    src={book.coverImage}
-                    alt={book.title}
-                    className="rounded-lg"
-                    style={{ maxHeight: '400px', width: 'auto', maxWidth: '100%' }}
-                  />
+                  {book.purchaseLink ? (
+                    <a
+                      href={book.purchaseLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cursor-pointer transition-transform hover:scale-105"
+                    >
+                      <img
+                        src={book.coverImage}
+                        alt={book.title}
+                        className="rounded-lg"
+                        style={{ maxHeight: '400px', width: 'auto', maxWidth: '100%' }}
+                      />
+                    </a>
+                  ) : (
+                    <img
+                      src={book.coverImage}
+                      alt={book.title}
+                      className="rounded-lg"
+                      style={{ maxHeight: '400px', width: 'auto', maxWidth: '100%' }}
+                    />
+                  )}
                 </motion.div>
               ))}
             </div>
