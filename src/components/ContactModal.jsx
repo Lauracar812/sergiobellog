@@ -240,7 +240,7 @@ export const ContactModal = ({ isOpen, onClose }) => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Cuéntame tu consulta..."
+                      placeholder="Mándame tu mensaje/consulta"
                       rows="4"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ECBE8F] transition resize-none text-black"
                       disabled={loading}

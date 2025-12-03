@@ -80,6 +80,9 @@ Los libros, artículos y ensayos de Sergio no solo inspiran: funcionan como una 
     title: 'Blog',
     buttonText: 'Hablemos',
     posts: []
+  },
+  socialMedia: {
+    networks: []
   }
 };
 
@@ -100,6 +103,10 @@ export const useAdminContent = () => {
       if (savedContent) {
         try {
           const parsed = JSON.parse(savedContent);
+          // Asegurar que socialMedia exista
+          if (!parsed.socialMedia) {
+            parsed.socialMedia = { networks: [] };
+          }
           console.log('✅ Contenido cargado desde localStorage');
           setContent(parsed);
         } catch (error) {
@@ -115,7 +122,7 @@ export const useAdminContent = () => {
 
     try {
       // Cargar todas las secciones
-      const [heroRes, aboutRes, booksRes, galleryRes, blogRes, servicesRes, eventsRes] = await Promise.all([
+      const [heroRes, aboutRes, booksRes, galleryRes, blogRes, servicesRes, eventsRes, socialRes] = await Promise.all([
         supabase.from('hero_section').select('*').single(),
         supabase.from('about_section').select('*').single(),
         supabase.from('books').select('*'),
@@ -123,6 +130,7 @@ export const useAdminContent = () => {
         supabase.from('blog_posts').select('*'),
         supabase.from('services').select('*'),
         supabase.from('events').select('*'),
+        supabase.from('social_media').select('*').order('display_order', { ascending: true }),
       ]);
 
       // Construir objeto de contenido
@@ -194,6 +202,19 @@ export const useAdminContent = () => {
             date: post.date_created,
             featured: post.featured,
             featuredImage: post.featured_image,
+          }))
+        },
+
+        // Cargar socialMedia desde Supabase
+        socialMedia: {
+          networks: (socialRes.data || []).map(social => ({
+            id: social.id,
+            name: social.name,
+            icon: social.icon,
+            iconId: social.icon.includes('<svg') ? '' : social.icon,
+            link: social.url,
+            displayOrder: social.display_order,
+            isActive: social.is_active,
           }))
         }
       };
@@ -349,6 +370,30 @@ export const useAdminContent = () => {
           featured: post.featured,
           featured_image: post.featuredImage,
         });
+      }
+
+      // Limpiar y guardar redes sociales en Supabase
+      if (newContent.socialMedia && newContent.socialMedia.networks) {
+        try {
+          // Primero eliminar todas las redes existentes
+          await supabase.from('social_media').delete().neq('id', -1);
+          
+          // Insertar las nuevas redes
+          for (let i = 0; i < newContent.socialMedia.networks.length; i++) {
+            const network = newContent.socialMedia.networks[i];
+            await supabase.from('social_media').insert({
+              id: typeof network.id === 'number' && network.id > 0 ? network.id : undefined,
+              name: network.name,
+              icon: network.icon,
+              url: network.link,
+              display_order: i + 1,
+              is_active: network.isActive !== false,
+            });
+          }
+          console.log('✅ Redes sociales guardadas en Supabase');
+        } catch (e) {
+          console.error('❌ Error guardando socialMedia en Supabase:', e);
+        }
       }
 
       setContent(newContent);

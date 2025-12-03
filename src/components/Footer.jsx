@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAdminContent } from '@/hooks/useAdminContent';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { content } = useAdminContent();
+  const socialNetworks = content?.socialMedia?.networks || [];
 
   return (
     <footer style={{
@@ -35,6 +38,55 @@ export default function Footer() {
           backgroundColor: '#ECBE8F',
           borderRadius: '1px'
         }} />
+
+        {/* Redes Sociales */}
+        {socialNetworks.length > 0 && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '16px',
+            marginTop: '10px',
+            marginBottom: '10px',
+            flexWrap: 'wrap'
+          }}>
+            {socialNetworks.map((network) => (
+              <a
+                key={network.id}
+                href={network.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={network.name}
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(236, 190, 143, 0.15)',
+                  transition: 'all 0.3s ease',
+                  color: '#ECBE8F'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ECBE8F';
+                  e.currentTarget.style.color = '#332C26';
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(236, 190, 143, 0.15)';
+                  e.currentTarget.style.color = '#ECBE8F';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div 
+                  style={{ width: '18px', height: '18px' }}
+                  dangerouslySetInnerHTML={{ __html: network.icon }}
+                />
+              </a>
+            ))}
+          </div>
+        )}
 
         {/* Texto principal */}
         <p style={{

@@ -10,6 +10,8 @@ import EventsSectionEditor from '@/components/admin/EventsSectionEditor';
 import ServicesSectionEditor from '@/components/admin/ServicesSectionEditor';
 import BlogSectionEditor from '@/components/admin/BlogSectionEditor';
 import MessagesSectionEditor from '@/components/admin/MessagesSectionEditor';
+import SocialMediaEditor from '@/components/admin/SocialMediaEditor';
+import NewsletterEditor from '@/components/admin/NewsletterEditor';
 import { LogOut } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -37,8 +39,12 @@ export default function AdminDashboard() {
         return '💼 Gestor de Servicios';
       case 'blog':
         return '📝 Gestor de Blog';
+      case 'newsletter':
+        return '📧 Suscriptores Newsletter';
       case 'messages':
         return '💬 Mensajes de Contacto';
+      case 'social':
+        return '📱 Redes Sociales';
       case 'settings':
         return '⚙️ Configuración';
       default:
@@ -131,9 +137,21 @@ export default function AdminDashboard() {
               </div>
             )}
 
+            {activeSection === 'newsletter' && (
+              <div>
+                <NewsletterEditor />
+              </div>
+            )}
+
             {activeSection === 'messages' && (
               <div>
                 <MessagesSectionEditor />
+              </div>
+            )}
+
+            {activeSection === 'social' && (
+              <div>
+                <SocialMediaEditor />
               </div>
             )}
 

@@ -10,7 +10,9 @@ import GallerySection from '@/components/GallerySection';
 import EventsSection from '@/components/EventsSection';
 import ServicesSection from '@/components/ServicesSection';
 import BlogSection from '@/components/BlogSection';
+import NewsletterSection from '@/components/NewsletterSection';
 import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 import { Toaster } from '@/components/ui/toaster';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLogin from '@/pages/AdminLogin';
@@ -66,8 +68,12 @@ function Home({ isContactOpen, setIsContactOpen }) {
           <div id="blog">
             <BlogSection />
           </div>
+          <div id="newsletter">
+            <NewsletterSection />
+          </div>
         </main>
         <Footer />
+        <ScrollToTop />
         <Toaster />
       </div>
     </>

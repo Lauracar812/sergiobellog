@@ -37,6 +37,13 @@ const Header = () => {
     }
   };
 
+  const handleLogoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -55,7 +62,8 @@ const Header = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
           <div 
-            className="flex-shrink-0 flex items-center"
+            onClick={handleLogoClick}
+            className="flex-shrink-0 flex items-center cursor-pointer"
             style={{
               width: '68px',
               height: '32px',
@@ -63,6 +71,7 @@ const Header = () => {
               opacity: 1
             }}
             alt="Sergio Bello Logo"
+            title="Ir al inicio"
           />
 
           {/* Desktop Navigation */}
